@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/_repository';
 import { User } from 'src/_repository/_entity';
-import { RegisterRequestDTO } from 'src/auth/dto/request';
 
 @Injectable()
 export class UserService {
