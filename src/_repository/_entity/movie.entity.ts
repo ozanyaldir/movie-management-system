@@ -29,6 +29,12 @@ export class Movie extends BaseEntity {
   })
   minAllowedAge: number;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  deletedAt: Date;
+
   @BeforeInsert()
   generateId() {
     this.guid = uuidv4();

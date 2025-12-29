@@ -25,8 +25,8 @@ export class UserRepository {
       .getOne();
   }
 
-  async updateUser(id: number, user: User): Promise<void> {
-    await this.repository.update({ id }, user);
+  async updateUser(id: number, m: User): Promise<void> {
+    await this.repository.update({ id }, m);
     return;
   }
 }
