@@ -11,9 +11,8 @@ export class MovieService {
     return await this.repository.createNewMovie(m);
   }
 
-  async update(id: number, m: Movie): Promise<Movie | null> {
+  async update(id: number, m: Movie): Promise<void> {
     await this.repository.update(id, m);
-    return await this.repository.getById(id);
   }
 
   async delete(id: number): Promise<void> {

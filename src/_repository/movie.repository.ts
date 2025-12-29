@@ -45,6 +45,7 @@ export class MovieRepository {
 
     const [result, total] = await this.repository
       .createQueryBuilder('movie')
+      .where('movie.deletedAt IS NULL')
       .addOrderBy(`movie.createdAt`, 'DESC')
       .skip(skip)
       .take(take)

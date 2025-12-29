@@ -8,7 +8,7 @@ export type PaginatedMovieResourcesDTO = {
   data?: MovieResourceDTO[];
 };
 
-export function newPaginatedMatchResourceDto(
+export function newPaginatedMovieResourceDTO(
   m: Movie[],
   total: number,
   page: number,

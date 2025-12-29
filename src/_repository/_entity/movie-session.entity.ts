@@ -39,6 +39,12 @@ export class MovieSession extends BaseEntity {
   })
   roomNumber: string;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  deletedAt: Date;
+
   @BeforeInsert()
   generateId() {
     this.guid = uuidv4();

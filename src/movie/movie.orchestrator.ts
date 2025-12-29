@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   MovieResourceDTO,
   newMovieResourceFromEntity,
-  newPaginatedMatchResourceDto,
+  newPaginatedMovieResourceDTO,
   PaginatedMovieResourcesDTO,
 } from './dto/resource';
 import { MovieService } from 'src/_service/movie.service';
@@ -36,7 +36,9 @@ export class MovieOrchestrator {
     }
 
     const m = newMovieFromUpdateRequestDTO(data);
-    const updatedMovie = await this.movieService.update(movie.id, m);
+    await this.movieService.update(movie.id, m);
+
+    const updatedMovie = await this.movieService.getByGuid(movie.guid);
     if (!updatedMovie) {
       throw new NotFoundException();
     }
@@ -58,6 +60,6 @@ export class MovieOrchestrator {
       query.size,
     );
 
-    return newPaginatedMatchResourceDto(result, total, page, size);
+    return newPaginatedMovieResourceDTO(result, total, page, size);
   }
 }
