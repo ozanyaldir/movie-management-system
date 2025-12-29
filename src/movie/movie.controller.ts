@@ -15,12 +15,12 @@ import { MovieResourceDTO } from './dto/resource';
 export class MovieController {
   constructor(private readonly movieOrchestrator: MovieOrchestrator) {}
 
-  @Post('create')
+  @Post()
   create(@Body() data: CreateMovieRequestDTO): Promise<MovieResourceDTO> {
     return this.movieOrchestrator.create(data);
   }
 
-  @Put('update/:id')
+  @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: UpdateMovieRequestDTO,
@@ -28,7 +28,7 @@ export class MovieController {
     return this.movieOrchestrator.update(id, data);
   }
 
-  @Delete('update/:id')
+  @Delete(':id')
   delete(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return this.movieOrchestrator.delete(id);
   }

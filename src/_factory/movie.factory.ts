@@ -7,7 +7,7 @@ export function newMovieFromCreateRequestDTO(
 ): Movie {
   const m = new Movie();
   m.title = dto.title;
-  m.minAllowedAge = dto.minAllowedAge;
+  m.minAllowedAge = dto.min_allowed_age;
   return m;
 }
 
@@ -16,7 +16,7 @@ export function newMovieFromUpdateRequestDTO(
 ): Movie {
   const m = new Movie();
   m.title = dto.title ?? undefined;
-  m.minAllowedAge = dto.minAllowedAge ?? undefined;
+  m.minAllowedAge = dto.min_allowed_age ?? undefined;
   return m;
 }
 

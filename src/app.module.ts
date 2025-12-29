@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { MovieModule } from './movie/movie.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       },
     }),
     AuthModule,
+    MovieModule,
   ],
   controllers: [AppController],
 })

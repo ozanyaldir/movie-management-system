@@ -11,7 +11,7 @@ export class UpdateMovieRequestDTO {
   @IsOptional()
   @IsInt()
   @Min(0)
-  minAllowedAge: number;
+  min_allowed_age: number;
 
   @IsOptional()
   @IsString()
