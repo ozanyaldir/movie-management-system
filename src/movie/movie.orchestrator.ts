@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   MovieResourceDTO,
   newMovieResourceFromEntity,
@@ -15,6 +15,7 @@ import {
   newMovieFromCreateRequestDTO,
   newMovieFromUpdateRequestDTO,
 } from 'src/_factory';
+import { MovieNotFoundException } from 'src/_exception';
 
 @Injectable()
 export class MovieOrchestrator {
@@ -32,15 +33,15 @@ export class MovieOrchestrator {
   ): Promise<MovieResourceDTO> {
     const movie = await this.movieService.getByGuid(id);
     if (!movie) {
-      throw new NotFoundException();
+      throw new MovieNotFoundException(id);
     }
 
     const m = newMovieFromUpdateRequestDTO(data);
     await this.movieService.update(movie.id, m);
 
-    const updatedMovie = await this.movieService.getByGuid(movie.guid);
+    const updatedMovie = await this.movieService.getByGuid(id);
     if (!updatedMovie) {
-      throw new NotFoundException();
+      throw new MovieNotFoundException(id);
     }
     return newMovieResourceFromEntity(updatedMovie);
   }
@@ -48,7 +49,7 @@ export class MovieOrchestrator {
   async delete(id: string): Promise<void> {
     const movie = await this.movieService.getByGuid(id);
     if (!movie) {
-      throw new NotFoundException();
+      throw new MovieNotFoundException(id);
     }
 
     await this.movieService.delete(movie.id);

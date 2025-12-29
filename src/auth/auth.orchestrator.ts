@@ -1,13 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginRequestDTO, RegisterRequestDTO } from './dto/request';
 import { AuthResourceDTO, newAuthResource } from './dto/resource';
 import { AuthService } from 'src/_service/auth.service';
 import { UserService } from 'src/_service/user.service';
 import { newUserFromRegisterRequestDTO } from 'src/_factory/user.factory';
+import { UserNotFoundException } from 'src/_exception';
 
 @Injectable()
 export class AuthOrchestrator {
@@ -21,7 +18,7 @@ export class AuthOrchestrator {
       data.username,
     );
     if (existingUser != null) {
-      throw new BadRequestException();
+      throw new UserNotFoundException(data.username);
     }
 
     const passwordHash = await this.authService.hashPassword(data.password);

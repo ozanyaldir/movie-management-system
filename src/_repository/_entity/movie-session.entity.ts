@@ -27,17 +27,17 @@ export class MovieSession extends BaseEntity {
   movieId: number;
 
   @Column({
-    type: 'datetime',
-    nullable: false,
-  })
-  screeningTime: Date;
-
-  @Column({
     type: 'varchar',
     length: 255,
     nullable: false,
   })
   roomNumber: string;
+
+  @Column({ type: 'date', nullable: false })
+  screeningDate: Date;
+
+  @Column({ type: 'time', nullable: false })
+  screeningTime: string;
 
   @Column({
     type: 'timestamp',

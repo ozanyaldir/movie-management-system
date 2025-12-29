@@ -17,9 +17,8 @@ export class CreateMovieSessionRequestDTO {
   @MaxLength(4)
   room_number: string;
 
-  @IsString()
   @IsDateString()
-  screening_date: string;
+  screening_date: Date;
 
   @IsIn(SCREENING_TIME_SLOTS)
   screening_time: string;

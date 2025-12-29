@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   CreateMovieSessionRequestDTO,
   ListMovieSessionsRequestDTO,
@@ -15,6 +15,10 @@ import {
   newMovieSessionFromCreateRequestDTO,
   newMovieSessionFromUpdateRequestDTO,
 } from 'src/_factory';
+import {
+  MovieNotFoundException,
+  MovieSessionNotFoundException,
+} from 'src/_exception';
 @Injectable()
 export class MovieSessionOrchestrator {
   constructor(
@@ -27,7 +31,7 @@ export class MovieSessionOrchestrator {
   ): Promise<MovieSessionResourceDTO> {
     const movie = await this.movieService.getByGuid(data.movie_id);
     if (!movie) {
-      throw new NotFoundException();
+      throw new MovieNotFoundException(data.movie_id);
     }
 
     const m = newMovieSessionFromCreateRequestDTO(data, movie);
@@ -41,7 +45,7 @@ export class MovieSessionOrchestrator {
   ): Promise<MovieSessionResourceDTO> {
     const existingMovieSession = await this.movieSessionService.getByGuid(id);
     if (!existingMovieSession) {
-      throw new NotFoundException();
+      throw new MovieSessionNotFoundException(id);
     }
 
     const m = newMovieSessionFromUpdateRequestDTO(data);
@@ -51,7 +55,7 @@ export class MovieSessionOrchestrator {
       existingMovieSession.guid,
     );
     if (!updatedMovieSession) {
-      throw new NotFoundException();
+      throw new MovieSessionNotFoundException(id);
     }
     return newMovieSessionResourceFromEntity(updatedMovieSession);
   }
@@ -59,7 +63,7 @@ export class MovieSessionOrchestrator {
   async delete(id: string): Promise<void> {
     const movieSession = await this.movieSessionService.getByGuid(id);
     if (!movieSession) {
-      throw new NotFoundException();
+      throw new MovieSessionNotFoundException(id);
     }
 
     await this.movieSessionService.delete(movieSession.id);
@@ -70,7 +74,7 @@ export class MovieSessionOrchestrator {
   ): Promise<PaginatedMovieSessionResourcesDTO> {
     const movie = await this.movieService.getByGuid(query.movie_id);
     if (!movie) {
-      throw new NotFoundException();
+      throw new MovieNotFoundException(query.movie_id);
     }
 
     const [result, total, page, size] = await this.movieSessionService.list(

@@ -25,12 +25,14 @@ export class GenericExceptionFilter implements ExceptionFilter<HttpException> {
         attributes: attributes,
       });
     } else if (exception instanceof HttpException) {
-      const errCode = exception.getResponse()?.['message'];
+      const errCode = exception.getResponse()?.['code'];
+      const errMessage = exception.getResponse()?.['message'];
       response.status(exception.getStatus()).send({
         status: 'error',
         timestamp: new Date().getTime(),
         error: {
           code: errCode,
+          message: errMessage,
         },
       });
     } else {
