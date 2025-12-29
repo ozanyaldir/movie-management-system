@@ -13,18 +13,21 @@ export interface Response<T> {
 }
 
 @Injectable()
-export class ResponseWrapperInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
-{
+export class ResponseWrapperInterceptor<T> implements NestInterceptor<
+  T,
+  Response<T>
+> {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
-    return next.handle().pipe(
-      map((data) =>
-        ResponseWrapperInterceptor.applyGenericSuccessResponseFormat(data),
-      ),
-    );
+    return next
+      .handle()
+      .pipe(
+        map((data) =>
+          ResponseWrapperInterceptor.applyGenericSuccessResponseFormat(data),
+        ),
+      );
   }
 
   public static applyGenericSuccessResponseFormat(payload: any): Response<any> {

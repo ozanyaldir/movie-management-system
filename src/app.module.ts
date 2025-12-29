@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -13,6 +15,9 @@ import { JwtModule } from '@nestjs/jwt';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
 
+      charset: 'utf8mb4',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      namingStrategy: new SnakeNamingStrategy(),
       autoLoadEntities: true,
       synchronize: false,
     }),
@@ -22,6 +27,7 @@ import { JwtModule } from '@nestjs/jwt';
         expiresIn: '1d',
       },
     }),
+    AuthModule,
   ],
   controllers: [AppController],
 })
