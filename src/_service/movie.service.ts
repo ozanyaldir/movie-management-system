@@ -24,4 +24,11 @@ export class MovieService {
   async getByGuid(guid: string): Promise<Movie | null> {
     return await this.repository.getByGuid(guid);
   }
+
+  async list(
+    page: number = 1,
+    size: number = 20,
+  ): Promise<[Movie[], number, number, number]> {
+    return await this.repository.list(page, size);
+  }
 }

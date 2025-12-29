@@ -1,7 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { MovieResourceDTO, newMovieResourceFromEntity } from './dto/resource';
+import {
+  MovieResourceDTO,
+  newMovieResourceFromEntity,
+  newPaginatedMatchResourceDto,
+  PaginatedMovieResourcesDTO,
+} from './dto/resource';
 import { MovieService } from 'src/_service/movie.service';
-import { CreateMovieRequestDTO, UpdateMovieRequestDTO } from './dto/request';
+import {
+  CreateMovieRequestDTO,
+  ListMoviesRequestDTO,
+  UpdateMovieRequestDTO,
+} from './dto/request';
 import {
   newMovieFromCreateRequestDTO,
   newMovieFromUpdateRequestDTO,
@@ -41,5 +50,14 @@ export class MovieOrchestrator {
     }
 
     await this.movieService.delete(movie.id);
+  }
+
+  async list(query: ListMoviesRequestDTO): Promise<PaginatedMovieResourcesDTO> {
+    const [result, total, page, size] = await this.movieService.list(
+      query.page,
+      query.size,
+    );
+
+    return newPaginatedMatchResourceDto(result, total, page, size);
   }
 }

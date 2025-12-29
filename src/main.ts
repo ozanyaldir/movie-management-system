@@ -6,7 +6,6 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { GenericExceptionFilter } from './_util/filters';
-import { ResponseWrapperInterceptor } from './_util/interceptors';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -31,7 +30,6 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalFilters(new GenericExceptionFilter());
-  app.useGlobalInterceptors(new ResponseWrapperInterceptor());
 
   app
     .getHttpAdapter()

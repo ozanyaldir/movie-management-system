@@ -35,4 +35,21 @@ export class MovieRepository {
       .andWhere('movie.deletedAt IS NULL')
       .getOne();
   }
+
+  async list(
+    page: number = 1,
+    size: number = 20,
+  ): Promise<[Movie[], number, number, number]> {
+    const skip = (Number(page) - 1) * Number(size);
+    const take = size;
+
+    const [result, total] = await this.repository
+      .createQueryBuilder('movie')
+      .addOrderBy(`movie.createdAt`, 'DESC')
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+
+    return [result, total, page, size];
+  }
 }

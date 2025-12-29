@@ -2,14 +2,20 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { MovieOrchestrator } from './movie.orchestrator';
-import { CreateMovieRequestDTO, UpdateMovieRequestDTO } from './dto/request';
-import { MovieResourceDTO } from './dto/resource';
+import {
+  CreateMovieRequestDTO,
+  ListMoviesRequestDTO,
+  UpdateMovieRequestDTO,
+} from './dto/request';
+import { MovieResourceDTO, PaginatedMovieResourcesDTO } from './dto/resource';
 
 @Controller('movies')
 export class MovieController {
@@ -31,5 +37,12 @@ export class MovieController {
   @Delete(':id')
   delete(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return this.movieOrchestrator.delete(id);
+  }
+
+  @Get()
+  list(
+    @Query() query: ListMoviesRequestDTO,
+  ): Promise<PaginatedMovieResourcesDTO> {
+    return this.movieOrchestrator.list(query);
   }
 }

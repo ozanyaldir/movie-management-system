@@ -32,6 +32,13 @@ export class MovieSession extends BaseEntity {
   })
   screeningTime: Date;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+  })
+  roomNumber: string;
+
   @BeforeInsert()
   generateId() {
     this.guid = uuidv4();
