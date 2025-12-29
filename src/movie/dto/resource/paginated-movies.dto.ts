@@ -1,12 +1,12 @@
 import { Movie } from 'src/_repository/_entity';
 import { MovieResourceDTO, newMovieResourceFromEntity } from './movie.dto';
 
-export type PaginatedMovieResourcesDTO = {
+export class PaginatedMovieResourcesDTO {
   total?: number;
   page?: number;
   size?: number;
   data?: MovieResourceDTO[];
-};
+}
 
 export function newPaginatedMovieResourceDTO(
   m: Movie[],

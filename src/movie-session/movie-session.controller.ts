@@ -9,6 +9,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+
 import { MovieSessionOrchestrator } from './movie-session.orchestrator';
 import {
   CreateMovieSessionRequestDTO,
@@ -19,6 +21,8 @@ import {
   MovieSessionResourceDTO,
   PaginatedMovieSessionResourcesDTO,
 } from './dto/resource';
+
+@ApiTags('sessions')
 @Controller('sessions')
 export class MovieSessionController {
   constructor(
@@ -26,6 +30,7 @@ export class MovieSessionController {
   ) {}
 
   @Post()
+  @ApiCreatedResponse({ type: MovieSessionResourceDTO })
   create(
     @Body() data: CreateMovieSessionRequestDTO,
   ): Promise<MovieSessionResourceDTO> {
@@ -33,6 +38,7 @@ export class MovieSessionController {
   }
 
   @Put(':id')
+  @ApiOkResponse({ type: MovieSessionResourceDTO })
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: UpdateMovieSessionRequestDTO,
@@ -41,11 +47,13 @@ export class MovieSessionController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ description: 'Session deleted' })
   delete(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return this.movieSessionOrchestrator.delete(id);
   }
 
   @Get()
+  @ApiOkResponse({ type: PaginatedMovieSessionResourcesDTO })
   list(
     @Query() query: ListMovieSessionsRequestDTO,
   ): Promise<PaginatedMovieSessionResourcesDTO> {

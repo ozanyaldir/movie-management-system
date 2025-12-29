@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
+import fastifyStatic from '@fastify/static';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { GenericExceptionFilter } from './_util/filters';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,6 +21,11 @@ async function bootstrap() {
     }),
     { bufferLogs: true },
   );
+
+  await app.register(fastifyStatic, {
+    root: join(__dirname, '..', 'public'),
+    prefix: '/public/',
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -37,6 +45,16 @@ async function bootstrap() {
     .addHook('onRoute', (opts) => {
       if (opts.path === '/healthcheck') opts.logLevel = 'silent';
     });
+
+  const docsConfig = new DocumentBuilder()
+    .setTitle('Movie Management API')
+    .setDescription('Movie Management API')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, docsConfig);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(3000, '127.0.0.1');
 }

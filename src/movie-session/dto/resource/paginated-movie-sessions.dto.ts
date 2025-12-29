@@ -4,12 +4,12 @@ import {
   newMovieSessionResourceFromEntity,
 } from './movie-session.dto';
 
-export type PaginatedMovieSessionResourcesDTO = {
+export class PaginatedMovieSessionResourcesDTO {
   total?: number;
   page?: number;
   size?: number;
   data?: MovieSessionResourceDTO[];
-};
+}
 
 export function newPaginatedMovieSessionResourceDTO(
   m: MovieSession[],
