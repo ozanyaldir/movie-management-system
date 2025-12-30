@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { BaseEntity } from './base.entity';
@@ -39,11 +40,8 @@ export class MovieSession extends BaseEntity {
   @Column({ type: 'time', nullable: false })
   screeningTime: string;
 
-  @Column({
-    type: 'timestamp',
-    nullable: true,
-  })
-  deletedAt: Date;
+  @DeleteDateColumn()
+  deletedAt: Date | null;
 
   @BeforeInsert()
   generateId() {

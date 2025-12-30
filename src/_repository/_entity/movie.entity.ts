@@ -1,4 +1,10 @@
-import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  BeforeInsert,
+  OneToMany,
+  DeleteDateColumn,
+} from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { BaseEntity } from './base.entity';
 import { MovieSession } from './movie-session.entity';
@@ -29,11 +35,8 @@ export class Movie extends BaseEntity {
   })
   minAllowedAge: number;
 
-  @Column({
-    type: 'timestamp',
-    nullable: true,
-  })
-  deletedAt: Date;
+  @DeleteDateColumn()
+  deletedAt: Date | null;
 
   @BeforeInsert()
   generateId() {

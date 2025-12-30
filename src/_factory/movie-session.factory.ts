@@ -37,9 +37,3 @@ export function newMovieSessionFromUpdateRequestDTO(
 
   return m;
 }
-
-export function newMovieSessionFromDeleteRequest(): MovieSession {
-  const m = new MovieSession();
-  m.deletedAt = moment().utc().toDate();
-  return m;
-}

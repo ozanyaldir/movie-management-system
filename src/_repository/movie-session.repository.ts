@@ -16,7 +16,10 @@ export class MovieSessionRepository {
 
   async update(id: number, m: MovieSession): Promise<void> {
     await this.repository.update({ id }, m);
-    return;
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.repository.softDelete(id);
   }
 
   async getById(id: number): Promise<MovieSession | null> {

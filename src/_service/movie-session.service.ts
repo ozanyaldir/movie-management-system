@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { newMovieSessionFromDeleteRequest } from 'src/_factory';
 import { MovieSessionRepository } from 'src/_repository';
 import { MovieSession } from 'src/_repository/_entity';
 
@@ -16,8 +15,7 @@ export class MovieSessionService {
   }
 
   async delete(id: number): Promise<void> {
-    const m = newMovieSessionFromDeleteRequest();
-    await this.repository.update(id, m);
+    await this.repository.delete(id);
   }
 
   async getByGuid(guid: string): Promise<MovieSession | null> {

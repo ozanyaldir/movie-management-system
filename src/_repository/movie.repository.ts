@@ -7,7 +7,7 @@ import { Movie } from './_entity';
 export class MovieRepository {
   constructor(@InjectRepository(Movie) private repository: Repository<Movie>) {}
 
-  async createNewMovie(m: Movie): Promise<Movie> {
+  async create(m: Movie): Promise<Movie> {
     return await this.repository.save(m);
   }
 
@@ -15,9 +15,8 @@ export class MovieRepository {
     await this.repository.update({ id }, m);
   }
 
-  async updateMovie(id: number, m: Movie): Promise<void> {
-    await this.repository.update({ id }, m);
-    return;
+  async delete(id: number): Promise<void> {
+    await this.repository.softDelete(id);
   }
 
   async getById(id: number): Promise<Movie | null> {
