@@ -1,25 +1,68 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ServiceUnavailableException } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { AppController } from '../src/app.controller';
+import { DataSource } from 'typeorm';
 
 describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+  let app: INestApplication;
+  let dataSource: { query: jest.Mock };
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+    dataSource = {
+      query: jest.fn(),
+    };
+
+    const moduleRef = await Test.createTestingModule({
+      controllers: [AppController],
+      providers: [
+        {
+          provide: DataSource,
+          useValue: dataSource,
+        },
+      ],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleRef.createNestApplication();
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterEach(async () => {
+    await app.close();
+  });
+
+  describe('/healthcheck', () => {
+    it('returns 200 UP', async () => {
+      await request(app.getHttpServer())
+        .get('/healthcheck')
+        .expect(200)
+        .expect('UP');
+    });
+  });
+
+  describe('/readiness', () => {
+    it('returns READY when DB is available', async () => {
+      dataSource.query.mockResolvedValueOnce([{ '1': 1 }]);
+
+      await request(app.getHttpServer())
+        .get('/readiness')
+        .expect(200)
+        .expect({ status: 'READY' });
+
+      expect(dataSource.query).toHaveBeenCalledWith('SELECT 1');
+    });
+
+    it('returns 503 when DB is unavailable', async () => {
+      dataSource.query.mockRejectedValueOnce(new Error('DB down'));
+
+      const res = await request(app.getHttpServer())
+        .get('/readiness')
+        .expect(503);
+
+      expect(res.body).toEqual({
+        status: 'NOT_READY',
+        reason: 'Database unavailable',
+      });
+    });
   });
 });
