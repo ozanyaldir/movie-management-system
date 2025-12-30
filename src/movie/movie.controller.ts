@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -23,19 +24,23 @@ import {
   UpdateMovieRequestDTO,
 } from './dto/request';
 import { MovieResourceDTO, PaginatedMovieResourcesDTO } from './dto/resource';
+import { JWTGuard, ManagerGuard } from 'src/_guard';
 
 @ApiTags('movies')
 @Controller('movies')
+@UseGuards(JWTGuard)
 export class MovieController {
   constructor(private readonly movieOrchestrator: MovieOrchestrator) {}
 
   @Post()
+  @UseGuards(ManagerGuard)
   @ApiCreatedResponse({ type: MovieResourceDTO })
   create(@Body() data: CreateMovieRequestDTO): Promise<MovieResourceDTO> {
     return this.movieOrchestrator.create(data);
   }
 
   @Put(':id')
+  @UseGuards(ManagerGuard)
   @ApiOkResponse({ type: MovieResourceDTO })
   @ApiNotFoundResponse({
     description: 'Movie not found',
@@ -48,6 +53,7 @@ export class MovieController {
   }
 
   @Delete(':id')
+  @UseGuards(ManagerGuard)
   @ApiOkResponse({ description: 'Movie deleted' })
   @ApiNotFoundResponse({
     description: 'Movie not found',

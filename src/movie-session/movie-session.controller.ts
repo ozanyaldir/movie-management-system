@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -26,15 +27,18 @@ import {
   MovieSessionResourceDTO,
   PaginatedMovieSessionResourcesDTO,
 } from './dto/resource';
+import { JWTGuard, ManagerGuard } from 'src/_guard';
 
 @ApiTags('sessions')
 @Controller('sessions')
+@UseGuards(JWTGuard)
 export class MovieSessionController {
   constructor(
     private readonly movieSessionOrchestrator: MovieSessionOrchestrator,
   ) {}
 
   @Post()
+  @UseGuards(ManagerGuard)
   @ApiCreatedResponse({ type: MovieSessionResourceDTO })
   @ApiNotFoundResponse({
     description: 'Movie not found',
@@ -46,6 +50,7 @@ export class MovieSessionController {
   }
 
   @Put(':id')
+  @UseGuards(ManagerGuard)
   @ApiOkResponse({ type: MovieSessionResourceDTO })
   @ApiNotFoundResponse({
     description: 'Movie session not found',
@@ -58,6 +63,7 @@ export class MovieSessionController {
   }
 
   @Delete(':id')
+  @UseGuards(ManagerGuard)
   @ApiOkResponse({ description: 'Session deleted' })
   @ApiNotFoundResponse({
     description: 'Movie session not found',
