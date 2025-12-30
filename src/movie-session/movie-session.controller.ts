@@ -23,11 +23,9 @@ import {
   ListMovieSessionsRequestDTO,
   UpdateMovieSessionRequestDTO,
 } from './dto/request';
-import {
-  MovieSessionResourceDTO,
-  PaginatedMovieSessionResourcesDTO,
-} from './dto/resource';
+import { PaginatedMovieSessionResourcesDTO } from './dto/resource';
 import { JWTGuard, ManagerGuard } from 'src/_guard';
+import { MovieSessionResourceDTO } from 'src/_shared/dto/resource';
 
 @ApiTags('sessions')
 @Controller('sessions')

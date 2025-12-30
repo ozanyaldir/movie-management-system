@@ -2,7 +2,7 @@ import { MovieSession } from 'src/_repository/_entity';
 import {
   MovieSessionResourceDTO,
   newMovieSessionResourceFromEntity,
-} from './movie-session.dto';
+} from '../../../_shared/dto/resource/movie-session.dto';
 
 export class PaginatedMovieSessionResourcesDTO {
   total?: number;

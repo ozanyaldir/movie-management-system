@@ -1,5 +1,8 @@
 import { Ticket } from 'src/_repository/_entity';
-import { TicketResourceDTO, newTicketResourceFromEntity } from './ticket.dto';
+import {
+  TicketResourceDTO,
+  newTicketResourceFromEntity,
+} from '../../../_shared/dto/resource/ticket.dto';
 
 export class PaginatedTicketResourcesDTO {
   total?: number;

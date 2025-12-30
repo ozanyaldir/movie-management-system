@@ -16,10 +16,11 @@ import {
 } from '@nestjs/swagger';
 import { TicketOrchestrator } from './ticket.orchestrator';
 import { BuyTicketRequestDTO, ListTicketsRequestDTO } from './dto/request';
-import { PaginatedTicketResourcesDTO, TicketResourceDTO } from './dto/resource';
+import { PaginatedTicketResourcesDTO } from './dto/resource';
 import { User } from 'src/_repository/_entity';
 import { CurrentUser } from 'src/_decorator';
 import { CustomerGuard, JWTGuard } from 'src/_guard';
+import { TicketResourceDTO } from 'src/_shared/dto/resource';
 
 @ApiTags('tickets')
 @Controller('tickets')

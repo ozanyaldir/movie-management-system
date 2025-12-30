@@ -23,8 +23,9 @@ import {
   ListMoviesRequestDTO,
   UpdateMovieRequestDTO,
 } from './dto/request';
-import { MovieResourceDTO, PaginatedMovieResourcesDTO } from './dto/resource';
+import { PaginatedMovieResourcesDTO } from './dto/resource';
 import { JWTGuard, ManagerGuard } from 'src/_guard';
+import { MovieResourceDTO } from 'src/_shared/dto/resource';
 
 @ApiTags('movies')
 @Controller('movies')

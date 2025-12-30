@@ -1,5 +1,8 @@
 import { Movie } from 'src/_repository/_entity';
-import { MovieResourceDTO, newMovieResourceFromEntity } from './movie.dto';
+import {
+  MovieResourceDTO,
+  newMovieResourceFromEntity,
+} from '../../../_shared/dto/resource/movie.dto';
 
 export class PaginatedMovieResourcesDTO {
   total?: number;

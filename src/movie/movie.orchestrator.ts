@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import {
-  MovieResourceDTO,
-  newMovieResourceFromEntity,
   newPaginatedMovieResourceDTO,
   PaginatedMovieResourcesDTO,
 } from './dto/resource';
@@ -16,6 +14,10 @@ import {
   newMovieFromUpdateRequestDTO,
 } from 'src/_factory';
 import { MovieNotFoundException } from 'src/_exception';
+import {
+  MovieResourceDTO,
+  newMovieResourceFromEntity,
+} from 'src/_shared/dto/resource';
 
 @Injectable()
 export class MovieOrchestrator {
@@ -24,7 +26,12 @@ export class MovieOrchestrator {
   async create(data: CreateMovieRequestDTO): Promise<MovieResourceDTO> {
     const m = newMovieFromCreateRequestDTO(data);
     const createdMovie = await this.movieService.create(m);
-    return newMovieResourceFromEntity(createdMovie);
+
+    const updatedMovie = await this.movieService.getByGuid(createdMovie.guid);
+    if (!updatedMovie) {
+      throw new MovieNotFoundException(createdMovie.guid);
+    }
+    return newMovieResourceFromEntity(updatedMovie);
   }
 
   async update(

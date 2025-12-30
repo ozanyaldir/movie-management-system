@@ -5,8 +5,6 @@ import {
   UpdateMovieSessionRequestDTO,
 } from './dto/request';
 import {
-  MovieSessionResourceDTO,
-  newMovieSessionResourceFromEntity,
   newPaginatedMovieSessionResourceDTO as newPaginatedMovieSessionResourceDTO,
   PaginatedMovieSessionResourcesDTO,
 } from './dto/resource';
@@ -19,6 +17,10 @@ import {
   MovieNotFoundException,
   MovieSessionNotFoundException,
 } from 'src/_exception';
+import {
+  MovieSessionResourceDTO,
+  newMovieSessionResourceFromEntity,
+} from 'src/_shared/dto/resource';
 @Injectable()
 export class MovieSessionOrchestrator {
   constructor(
@@ -36,7 +38,14 @@ export class MovieSessionOrchestrator {
 
     const m = newMovieSessionFromCreateRequestDTO(data, movie);
     const createdMovieSession = await this.movieSessionService.create(m);
-    return newMovieSessionResourceFromEntity(createdMovieSession);
+
+    const detailedMovieSession = await this.movieSessionService.getByGuid(
+      createdMovieSession.guid,
+    );
+    if (!detailedMovieSession) {
+      throw new MovieSessionNotFoundException(createdMovieSession.guid);
+    }
+    return newMovieSessionResourceFromEntity(detailedMovieSession);
   }
 
   async update(

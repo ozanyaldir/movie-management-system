@@ -3,9 +3,7 @@ import { MovieSessionService } from 'src/_service/';
 import { BuyTicketRequestDTO, ListTicketsRequestDTO } from './dto/request';
 import {
   newPaginatedTicketResourceDTO,
-  newTicketResourceFromEntity,
   PaginatedTicketResourcesDTO,
-  TicketResourceDTO,
 } from './dto/resource';
 import {
   MovieSessionNotFoundException,
@@ -14,6 +12,10 @@ import {
 import { User } from 'src/_repository/_entity';
 import { newTicketFromUserAndSession } from 'src/_factory/ticket.factory';
 import { TicketService } from 'src/_service';
+import {
+  newTicketResourceFromEntity,
+  TicketResourceDTO,
+} from 'src/_shared/dto/resource';
 
 @Injectable()
 export class TicketOrchestrator {
@@ -35,7 +37,14 @@ export class TicketOrchestrator {
 
     const m = newTicketFromUserAndSession(user, movieSession);
     const createdTicket = await this.ticketService.create(m);
-    return newTicketResourceFromEntity(createdTicket);
+
+    const detailedTicket = await this.ticketService.getByGuid(
+      createdTicket.guid,
+    );
+    if (!detailedTicket) {
+      throw new TicketNotFoundException(createdTicket.guid);
+    }
+    return newTicketResourceFromEntity(detailedTicket);
   }
 
   async useTicket(id: string): Promise<TicketResourceDTO> {
