@@ -39,10 +39,9 @@ export class MovieSessionOrchestrator {
     const m = newMovieSessionFromCreateRequestDTO(data, movie);
     const createdMovieSession = await this.movieSessionService.create(m);
 
-    const detailedMovieSession =
-      await this.movieSessionService.getDetailedByGuid(
-        createdMovieSession.guid,
-      );
+    const detailedMovieSession = await this.movieSessionService.getDetailedById(
+      createdMovieSession.id,
+    );
     if (!detailedMovieSession) {
       throw new MovieSessionNotFoundException(createdMovieSession.guid);
     }
@@ -62,10 +61,9 @@ export class MovieSessionOrchestrator {
     const m = newMovieSessionFromUpdateRequestDTO(data);
     await this.movieSessionService.update(existingMovieSession.id, m);
 
-    const updatedMovieSession =
-      await this.movieSessionService.getDetailedByGuid(
-        existingMovieSession.guid,
-      );
+    const updatedMovieSession = await this.movieSessionService.getDetailedById(
+      existingMovieSession.id,
+    );
     if (!updatedMovieSession) {
       throw new MovieSessionNotFoundException(id);
     }

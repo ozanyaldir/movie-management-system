@@ -18,6 +18,14 @@ export class TicketService {
     await this.repository.setUsed(id);
   }
 
+  async getPlainById(id: number): Promise<Ticket | null> {
+    return await this.repository.getById(id);
+  }
+
+  async getDetailedById(id: number): Promise<Ticket | null> {
+    return await this.repository.getById(id, true);
+  }
+
   async getPlainByGuid(guid: string): Promise<Ticket | null> {
     return await this.repository.getByGuid(guid);
   }

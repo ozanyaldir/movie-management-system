@@ -16,6 +16,12 @@ export class UserRepository {
     return;
   }
 
+  async getById(id: number): Promise<User | null> {
+    return await this.repository.findOne({
+      where: { id },
+    });
+  }
+
   async getByGuid(guid: string): Promise<User | null> {
     return await this.repository.findOne({
       where: { guid },

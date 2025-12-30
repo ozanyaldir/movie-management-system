@@ -24,7 +24,7 @@ export class JWTGuard implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      const user = await this.userService.getByGuid(jwtPayload.sub);
+      const user = await this.userService.getPlainByGuid(jwtPayload.sub);
       if (!user) {
         throw new UnauthorizedException();
       }

@@ -10,11 +10,15 @@ export class UserService {
     return await this.repository.createNewUser(m);
   }
 
-  async getByGuid(guid: string): Promise<User | null> {
+  async getPlainById(id: number): Promise<User | null> {
+    return await this.repository.getById(id);
+  }
+
+  async getPlainByGuid(guid: string): Promise<User | null> {
     return await this.repository.getByGuid(guid);
   }
 
-  async getByUsername(username: string): Promise<User | null> {
+  async getPlainByUsername(username: string): Promise<User | null> {
     return await this.repository.getByUsername(username);
   }
 }

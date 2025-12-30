@@ -27,9 +27,11 @@ export class TicketRepository {
     return;
   }
 
-  async getById(id: number): Promise<Ticket | null> {
+  async getById(id: number, detailed: boolean = false): Promise<Ticket | null> {
+    const relations = ['session', 'movie'];
     return await this.repository.findOne({
       where: { id },
+      relations: detailed ? relations : [],
     });
   }
 

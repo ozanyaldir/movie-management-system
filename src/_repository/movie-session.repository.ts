@@ -22,9 +22,16 @@ export class MovieSessionRepository {
     await this.repository.softDelete(id);
   }
 
-  async getById(id: number): Promise<MovieSession | null> {
+  async getById(
+    id: number,
+    detailed: boolean = false,
+  ): Promise<MovieSession | null> {
+    const relations = ['movie'];
     return await this.repository.findOne({
-      where: { id },
+      where: {
+        id,
+      },
+      relations: detailed ? relations : [],
     });
   }
 

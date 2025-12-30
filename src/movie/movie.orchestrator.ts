@@ -48,7 +48,7 @@ export class MovieOrchestrator {
     const m = newMovieFromUpdateRequestDTO(data);
     await this.movieService.update(movie.id, m);
 
-    const updatedMovie = await this.movieService.getDetailedByGuid(id);
+    const updatedMovie = await this.movieService.getDetailedById(movie.id);
     if (!updatedMovie) {
       throw new MovieNotFoundException(id);
     }

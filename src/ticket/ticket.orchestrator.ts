@@ -38,8 +38,8 @@ export class TicketOrchestrator {
     const m = newTicketFromUserAndSession(user, movieSession);
     const createdTicket = await this.ticketService.create(m);
 
-    const detailedTicket = await this.ticketService.getDetailedByGuid(
-      createdTicket.guid,
+    const detailedTicket = await this.ticketService.getDetailedById(
+      createdTicket.id,
     );
     if (!detailedTicket) {
       throw new TicketNotFoundException(createdTicket.guid);
@@ -55,7 +55,7 @@ export class TicketOrchestrator {
 
     await this.ticketService.setUsed(ticket.id);
 
-    const updatedTicket = await this.ticketService.getDetailedByGuid(id);
+    const updatedTicket = await this.ticketService.getDetailedById(ticket.id);
     if (!updatedTicket) {
       throw new TicketNotFoundException(id);
     }

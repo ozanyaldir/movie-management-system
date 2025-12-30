@@ -19,9 +19,13 @@ export class MovieRepository {
     await this.repository.softDelete(id);
   }
 
-  async getById(id: number): Promise<Movie | null> {
+  async getById(id: number, detailed: boolean = false): Promise<Movie | null> {
+    const relations = ['sessions'];
     return await this.repository.findOne({
-      where: { id },
+      where: {
+        id,
+      },
+      relations: detailed ? relations : [],
     });
   }
 

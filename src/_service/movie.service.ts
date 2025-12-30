@@ -18,6 +18,14 @@ export class MovieService {
     await this.repository.delete(id);
   }
 
+  async getPlainById(id: number): Promise<Movie | null> {
+    return await this.repository.getById(id);
+  }
+
+  async getDetailedById(id: number): Promise<Movie | null> {
+    return await this.repository.getById(id, true);
+  }
+
   async getPlainByGuid(guid: string): Promise<Movie | null> {
     return await this.repository.getByGuid(guid);
   }
