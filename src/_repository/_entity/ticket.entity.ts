@@ -5,9 +5,9 @@ import { User } from './user.entity';
 import { MovieSession } from './movie-session.entity';
 
 @Entity({
-  name: 'user_tickets',
+  name: 'tickets',
 })
-export class UserTicket extends BaseEntity {
+export class Ticket extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 255,

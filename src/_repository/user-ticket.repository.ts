@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserTicket } from './_entity';
+import { Ticket } from './_entity';
 
 @Injectable()
-export class UserTicketRepository {
+export class TicketRepository {
   constructor(
-    @InjectRepository(UserTicket) private repository: Repository<UserTicket>,
+    @InjectRepository(Ticket) private repository: Repository<Ticket>,
   ) {}
 
-  async createNewUserTicket(m: UserTicket): Promise<UserTicket> {
+  async create(m: Ticket): Promise<Ticket> {
     return await this.repository.save(m);
   }
 
-  async setUserTicketUsed(id: number): Promise<void> {
+  async setTicketUsed(id: number): Promise<void> {
     await this.repository.update(
       { id },
       {

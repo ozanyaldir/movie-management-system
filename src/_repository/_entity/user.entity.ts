@@ -1,7 +1,7 @@
 import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { BaseEntity } from './base.entity';
-import { UserTicket } from './user-ticket.entity';
+import { Ticket } from './ticket.entity';
 
 export enum UserType {
   Manager = 'manager',
@@ -50,6 +50,6 @@ export class User extends BaseEntity {
     this.guid = uuidv4();
   }
 
-  @OneToMany(() => UserTicket, (ticket) => ticket.user)
-  tickets: UserTicket[];
+  @OneToMany(() => Ticket, (ticket) => ticket.user)
+  tickets: Ticket[];
 }

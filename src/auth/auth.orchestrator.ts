@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { LoginRequestDTO, RegisterRequestDTO } from './dto/request';
 import { AuthResourceDTO, newAuthResource } from './dto/resource';
 import { AuthService } from 'src/_service/auth.service';

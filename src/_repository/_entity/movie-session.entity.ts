@@ -10,7 +10,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { BaseEntity } from './base.entity';
 import { Movie } from './movie.entity';
-import { UserTicket } from './user-ticket.entity';
+import { Ticket } from './ticket.entity';
 
 @Entity({
   name: 'movie_sessions',
@@ -52,6 +52,6 @@ export class MovieSession extends BaseEntity {
   @JoinColumn({ foreignKeyConstraintName: 'id', name: 'movie_id' })
   movie: Movie;
 
-  @OneToMany(() => UserTicket, (ticket) => ticket.session)
-  tickets: UserTicket[];
+  @OneToMany(() => Ticket, (ticket) => ticket.session)
+  tickets: Ticket[];
 }
