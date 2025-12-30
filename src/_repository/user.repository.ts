@@ -11,22 +11,20 @@ export class UserRepository {
     return await this.repository.save(m);
   }
 
-  async getPlainUserByGuid(guid: string): Promise<User | null> {
-    return await this.repository
-      .createQueryBuilder('user')
-      .where('user.guid = :guid', { guid: guid })
-      .getOne();
-  }
-
-  async getPlainUserByUsername(username: string): Promise<User | null> {
-    return await this.repository
-      .createQueryBuilder('user')
-      .where('user.username = :username', { username: username })
-      .getOne();
-  }
-
   async updateUser(id: number, m: User): Promise<void> {
     await this.repository.update({ id }, m);
     return;
+  }
+
+  async getByGuid(guid: string): Promise<User | null> {
+    return await this.repository.findOne({
+      where: { guid },
+    });
+  }
+
+  async getByUsername(username: string): Promise<User | null> {
+    return await this.repository.findOne({
+      where: { username },
+    });
   }
 }

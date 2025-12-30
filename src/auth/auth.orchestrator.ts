@@ -17,9 +17,7 @@ export class AuthOrchestrator {
   ) {}
 
   async register(data: RegisterRequestDTO): Promise<AuthResourceDTO> {
-    const existingUser = await this.userService.getPlainUserByUsername(
-      data.username,
-    );
+    const existingUser = await this.userService.getByUsername(data.username);
     if (existingUser != null) {
       throw new BadRequestException();
     }
@@ -33,9 +31,7 @@ export class AuthOrchestrator {
   }
 
   async login(data: LoginRequestDTO): Promise<AuthResourceDTO> {
-    const existingUser = await this.userService.getPlainUserByUsername(
-      data.username,
-    );
+    const existingUser = await this.userService.getByUsername(data.username);
     if (!existingUser) {
       throw new UnauthorizedException();
     }

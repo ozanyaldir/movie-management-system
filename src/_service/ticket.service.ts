@@ -18,8 +18,12 @@ export class TicketService {
     await this.repository.setUsed(id);
   }
 
-  async getByGuid(guid: string): Promise<Ticket | null> {
+  async getPlainByGuid(guid: string): Promise<Ticket | null> {
     return await this.repository.getByGuid(guid);
+  }
+
+  async getDetailedByGuid(guid: string): Promise<Ticket | null> {
+    return await this.repository.getByGuid(guid, true);
   }
 
   async list(

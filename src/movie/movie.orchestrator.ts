@@ -27,7 +27,9 @@ export class MovieOrchestrator {
     const m = newMovieFromCreateRequestDTO(data);
     const createdMovie = await this.movieService.create(m);
 
-    const updatedMovie = await this.movieService.getByGuid(createdMovie.guid);
+    const updatedMovie = await this.movieService.getDetailedByGuid(
+      createdMovie.guid,
+    );
     if (!updatedMovie) {
       throw new MovieNotFoundException(createdMovie.guid);
     }
@@ -38,7 +40,7 @@ export class MovieOrchestrator {
     id: string,
     data: UpdateMovieRequestDTO,
   ): Promise<MovieResourceDTO> {
-    const movie = await this.movieService.getByGuid(id);
+    const movie = await this.movieService.getPlainByGuid(id);
     if (!movie) {
       throw new MovieNotFoundException(id);
     }
@@ -46,7 +48,7 @@ export class MovieOrchestrator {
     const m = newMovieFromUpdateRequestDTO(data);
     await this.movieService.update(movie.id, m);
 
-    const updatedMovie = await this.movieService.getByGuid(id);
+    const updatedMovie = await this.movieService.getDetailedByGuid(id);
     if (!updatedMovie) {
       throw new MovieNotFoundException(id);
     }
@@ -54,7 +56,7 @@ export class MovieOrchestrator {
   }
 
   async delete(id: string): Promise<void> {
-    const movie = await this.movieService.getByGuid(id);
+    const movie = await this.movieService.getPlainByGuid(id);
     if (!movie) {
       throw new MovieNotFoundException(id);
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './_entity';
 
@@ -20,20 +20,23 @@ export class MovieRepository {
   }
 
   async getById(id: number): Promise<Movie | null> {
-    const result = await this.repository.findOne({
+    return await this.repository.findOne({
       where: { id },
-      relations: [],
     });
-    return result;
   }
 
-  async getByGuid(guid: string): Promise<Movie | null> {
-    return await this.repository
-      .createQueryBuilder('movie')
-      .where('movie.guid = :guid', { guid: guid })
-      .andWhere('movie.deletedAt IS NULL')
-      .leftJoinAndSelect('movie.sessions', 'sessions')
-      .getOne();
+  async getByGuid(
+    guid: string,
+    detailed: boolean = false,
+  ): Promise<Movie | null> {
+    const relations = ['sessions'];
+    return await this.repository.findOne({
+      where: {
+        guid,
+        deletedAt: IsNull(),
+      },
+      relations: detailed ? relations : [],
+    });
   }
 
   async list(

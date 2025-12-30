@@ -28,7 +28,7 @@ export class TicketOrchestrator {
     user: User,
     data: BuyTicketRequestDTO,
   ): Promise<TicketResourceDTO> {
-    const movieSession = await this.movieSessionService.getByGuid(
+    const movieSession = await this.movieSessionService.getPlainByGuid(
       data.session_id,
     );
     if (!movieSession) {
@@ -38,7 +38,7 @@ export class TicketOrchestrator {
     const m = newTicketFromUserAndSession(user, movieSession);
     const createdTicket = await this.ticketService.create(m);
 
-    const detailedTicket = await this.ticketService.getByGuid(
+    const detailedTicket = await this.ticketService.getDetailedByGuid(
       createdTicket.guid,
     );
     if (!detailedTicket) {
@@ -48,14 +48,14 @@ export class TicketOrchestrator {
   }
 
   async useTicket(id: string): Promise<TicketResourceDTO> {
-    const ticket = await this.ticketService.getByGuid(id);
+    const ticket = await this.ticketService.getPlainByGuid(id);
     if (!ticket) {
       throw new TicketNotFoundException(id);
     }
 
     await this.ticketService.setUsed(ticket.id);
 
-    const updatedTicket = await this.ticketService.getByGuid(id);
+    const updatedTicket = await this.ticketService.getDetailedByGuid(id);
     if (!updatedTicket) {
       throw new TicketNotFoundException(id);
     }

@@ -28,20 +28,20 @@ export class TicketRepository {
   }
 
   async getById(id: number): Promise<Ticket | null> {
-    const result = await this.repository.findOne({
+    return await this.repository.findOne({
       where: { id },
-      relations: [],
     });
-    return result;
   }
 
-  async getByGuid(guid: string): Promise<Ticket | null> {
-    return await this.repository
-      .createQueryBuilder('ticket')
-      .where('ticket.guid = :guid', { guid: guid })
-      .leftJoinAndSelect('ticket.session', 'session')
-      .leftJoinAndSelect('session.movie', 'movie')
-      .getOne();
+  async getByGuid(
+    guid: string,
+    detailed: boolean = false,
+  ): Promise<Ticket | null> {
+    const relations = ['session', 'movie'];
+    return await this.repository.findOne({
+      where: { guid },
+      relations: detailed ? relations : [],
+    });
   }
 
   async list(

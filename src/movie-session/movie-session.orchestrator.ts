@@ -31,7 +31,7 @@ export class MovieSessionOrchestrator {
   async create(
     data: CreateMovieSessionRequestDTO,
   ): Promise<MovieSessionResourceDTO> {
-    const movie = await this.movieService.getByGuid(data.movie_id);
+    const movie = await this.movieService.getPlainByGuid(data.movie_id);
     if (!movie) {
       throw new MovieNotFoundException(data.movie_id);
     }
@@ -39,9 +39,10 @@ export class MovieSessionOrchestrator {
     const m = newMovieSessionFromCreateRequestDTO(data, movie);
     const createdMovieSession = await this.movieSessionService.create(m);
 
-    const detailedMovieSession = await this.movieSessionService.getByGuid(
-      createdMovieSession.guid,
-    );
+    const detailedMovieSession =
+      await this.movieSessionService.getDetailedByGuid(
+        createdMovieSession.guid,
+      );
     if (!detailedMovieSession) {
       throw new MovieSessionNotFoundException(createdMovieSession.guid);
     }
@@ -52,7 +53,8 @@ export class MovieSessionOrchestrator {
     id: string,
     data: UpdateMovieSessionRequestDTO,
   ): Promise<MovieSessionResourceDTO> {
-    const existingMovieSession = await this.movieSessionService.getByGuid(id);
+    const existingMovieSession =
+      await this.movieSessionService.getPlainByGuid(id);
     if (!existingMovieSession) {
       throw new MovieSessionNotFoundException(id);
     }
@@ -60,9 +62,10 @@ export class MovieSessionOrchestrator {
     const m = newMovieSessionFromUpdateRequestDTO(data);
     await this.movieSessionService.update(existingMovieSession.id, m);
 
-    const updatedMovieSession = await this.movieSessionService.getByGuid(
-      existingMovieSession.guid,
-    );
+    const updatedMovieSession =
+      await this.movieSessionService.getDetailedByGuid(
+        existingMovieSession.guid,
+      );
     if (!updatedMovieSession) {
       throw new MovieSessionNotFoundException(id);
     }
@@ -70,7 +73,7 @@ export class MovieSessionOrchestrator {
   }
 
   async delete(id: string): Promise<void> {
-    const movieSession = await this.movieSessionService.getByGuid(id);
+    const movieSession = await this.movieSessionService.getPlainByGuid(id);
     if (!movieSession) {
       throw new MovieSessionNotFoundException(id);
     }
@@ -81,7 +84,7 @@ export class MovieSessionOrchestrator {
   async list(
     query: ListMovieSessionsRequestDTO,
   ): Promise<PaginatedMovieSessionResourcesDTO> {
-    const movie = await this.movieService.getByGuid(query.movie_id);
+    const movie = await this.movieService.getPlainByGuid(query.movie_id);
     if (!movie) {
       throw new MovieNotFoundException(query.movie_id);
     }
