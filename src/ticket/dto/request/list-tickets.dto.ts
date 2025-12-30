@@ -22,10 +22,10 @@ export class ListTicketsRequestDTO {
       return undefined;
     }
     if (typeof value === 'string') {
-      if (value === 'true' || value === '1') return true
-      if (value === 'false' || value === '0') return false
+      if (value === 'true' || value === '1') return true;
+      if (value === 'false' || value === '0') return false;
     }
-    return Boolean(value)
+    return Boolean(value);
   })
-  is_used?: boolean
+  is_used?: boolean;
 }

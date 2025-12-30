@@ -66,6 +66,7 @@ export class MovieOrchestrator {
 
   async list(query: ListMoviesRequestDTO): Promise<PaginatedMovieResourcesDTO> {
     const [result, total, page, size] = await this.movieService.list(
+      query.sort_by,
       query.page,
       query.size,
     );

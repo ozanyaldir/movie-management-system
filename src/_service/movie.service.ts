@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MovieRepository } from 'src/_repository';
 import { Movie } from 'src/_repository/_entity';
+import { SortMoviesBy } from 'src/_shared/constant';
 
 @Injectable()
 export class MovieService {
@@ -35,9 +36,10 @@ export class MovieService {
   }
 
   async list(
+    sort_by: SortMoviesBy | null = null,
     page: number = 1,
     size: number = 20,
   ): Promise<[Movie[], number, number, number]> {
-    return await this.repository.list(page, size);
+    return await this.repository.list(sort_by, page, size);
   }
 }

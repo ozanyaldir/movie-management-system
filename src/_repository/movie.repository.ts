@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IsNull, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './_entity';
+import { SortMoviesBy } from 'src/_shared/constant';
 
 @Injectable()
 export class MovieRepository {
@@ -44,19 +45,31 @@ export class MovieRepository {
   }
 
   async list(
+    sort_by: SortMoviesBy | null = null,
     page: number = 1,
     size: number = 20,
   ): Promise<[Movie[], number, number, number]> {
     const skip = (Number(page) - 1) * Number(size);
     const take = size;
 
-    const [result, total] = await this.repository
+    const sortColumnMap: Record<SortMoviesBy, string> = {
+      [SortMoviesBy.Title]: 'movie.title',
+      [SortMoviesBy.MinAllowedAge]: 'movie.minAllowedAge',
+    };
+
+    const qb = this.repository
       .createQueryBuilder('movie')
       .where('movie.deletedAt IS NULL')
-      .addOrderBy(`movie.createdAt`, 'DESC')
       .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .take(take);
+
+    if (sort_by && sortColumnMap[sort_by]) {
+      qb.addOrderBy(sortColumnMap[sort_by], 'ASC');
+    } else {
+      qb.addOrderBy('movie.createdAt', 'DESC');
+    }
+
+    const [result, total] = await qb.getManyAndCount();
 
     return [result, total, page, size];
   }
