@@ -36,9 +36,10 @@ export class TicketService {
 
   async list(
     userId: number,
+    isUsed: boolean | null = null,
     page: number = 1,
     size: number = 20,
   ): Promise<[Ticket[], number, number, number]> {
-    return await this.repository.list(userId, page, size);
+    return await this.repository.list(userId, isUsed, page, size);
   }
 }

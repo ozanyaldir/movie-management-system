@@ -68,6 +68,7 @@ export class TicketOrchestrator {
   ): Promise<PaginatedTicketResourcesDTO> {
     const [result, total, page, size] = await this.ticketService.list(
       user.id,
+      query.is_used,
       query.page,
       query.size,
     );

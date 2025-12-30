@@ -28,7 +28,7 @@ export class TicketRepository {
   }
 
   async getById(id: number, detailed: boolean = false): Promise<Ticket | null> {
-    const relations = ['session', 'movie'];
+    const relations = ['session', 'session.movie'];
     return await this.repository.findOne({
       where: { id },
       relations: detailed ? relations : [],
@@ -39,7 +39,7 @@ export class TicketRepository {
     guid: string,
     detailed: boolean = false,
   ): Promise<Ticket | null> {
-    const relations = ['session', 'movie'];
+    const relations = ['session', 'session.movie'];
     return await this.repository.findOne({
       where: { guid },
       relations: detailed ? relations : [],
@@ -48,21 +48,27 @@ export class TicketRepository {
 
   async list(
     userId: number,
+    isUsed: boolean | null = null,
     page: number = 1,
     size: number = 20,
   ): Promise<[Ticket[], number, number, number]> {
     const skip = (Number(page) - 1) * Number(size);
     const take = size;
 
-    const [result, total] = await this.repository
+    const qb = this.repository
       .createQueryBuilder('ticket')
-      .where('ticket.userId = :userId', { userId: userId })
+      .where('ticket.userId = :userId', { userId })
       .leftJoinAndSelect('ticket.session', 'session')
       .leftJoinAndSelect('session.movie', 'movie')
-      .addOrderBy(`ticket.createdAt`, 'DESC')
+      .addOrderBy('ticket.createdAt', 'DESC')
       .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .take(take);
+
+    if (isUsed != null) {
+      qb.andWhere('ticket.isUsed = :isUsed', { isUsed });
+    }
+
+    const [result, total] = await qb.getManyAndCount();
 
     return [result, total, page, size];
   }
