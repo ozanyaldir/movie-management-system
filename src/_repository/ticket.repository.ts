@@ -17,11 +17,7 @@ export class TicketRepository {
     await this.repository.update({ id }, m);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.repository.softDelete(id);
-  }
-
-  async setTicketUsed(id: number): Promise<void> {
+  async setUsed(id: number): Promise<void> {
     await this.repository.update(
       { id },
       {
@@ -43,7 +39,6 @@ export class TicketRepository {
     return await this.repository
       .createQueryBuilder('ticket')
       .where('ticket.guid = :guid', { guid: guid })
-      .andWhere('ticket.deletedAt IS NULL')
       .getOne();
   }
 
@@ -58,7 +53,6 @@ export class TicketRepository {
     const [result, total] = await this.repository
       .createQueryBuilder('ticket')
       .where('ticket.userId = :userId', { userId: userId })
-      .andWhere('ticket.deletedAt IS NULL')
       .addOrderBy(`ticket.createdAt`, 'DESC')
       .skip(skip)
       .take(take)

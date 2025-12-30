@@ -14,8 +14,8 @@ export class TicketService {
     await this.repository.update(id, m);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.repository.delete(id);
+  async setUsed(id: number): Promise<void> {
+    await this.repository.setUsed(id);
   }
 
   async getByGuid(guid: string): Promise<Ticket | null> {
