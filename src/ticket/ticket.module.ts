@@ -1,13 +1,29 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TicketController } from './ticket.controller';
-import { Movie, MovieSession, Ticket } from 'src/_repository/_entity';
-import { TicketRepository } from 'src/_repository';
+import { Movie, MovieSession, Ticket, User } from 'src/_repository/_entity';
+import {
+  MovieSessionRepository,
+  TicketRepository,
+  UserRepository,
+} from 'src/_repository';
 import { TicketOrchestrator } from './ticket.orchestrator';
+import { MovieSessionService, TicketService, UserService } from 'src/_service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Movie, MovieSession, Ticket])],
+  imports: [TypeOrmModule.forFeature([User, Movie, MovieSession, Ticket])],
   controllers: [TicketController],
-  providers: [TicketRepository, TicketOrchestrator],
+  providers: [
+    UserRepository,
+    MovieSessionRepository,
+    TicketRepository,
+    JwtService,
+    UserService,
+    MovieSessionService,
+    TicketService,
+    TicketRepository,
+    TicketOrchestrator,
+  ],
 })
 export class TicketModule {}

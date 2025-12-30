@@ -1,1 +1,1 @@
-export * from './create-movie-session.dto';
+export * from './buy-ticket.dto';

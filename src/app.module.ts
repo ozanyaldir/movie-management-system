@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { MovieModule } from './movie/movie.module';
 import { MovieSessionModule } from './movie-session/movie-session.module';
+import { TicketModule } from './ticket/ticket.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MovieSessionModule } from './movie-session/movie-session.module';
     AuthModule,
     MovieModule,
     MovieSessionModule,
+    TicketModule,
   ],
   controllers: [AppController],
 })

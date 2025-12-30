@@ -5,7 +5,7 @@ import {
   newPaginatedMovieResourceDTO,
   PaginatedMovieResourcesDTO,
 } from './dto/resource';
-import { MovieService } from 'src/_service/movie.service';
+import { MovieService } from 'src/_service';
 import {
   CreateMovieRequestDTO,
   ListMoviesRequestDTO,
