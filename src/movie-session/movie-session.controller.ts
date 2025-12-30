@@ -9,7 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOkResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 import { MovieSessionOrchestrator } from './movie-session.orchestrator';
 import {
@@ -31,6 +31,9 @@ export class MovieSessionController {
 
   @Post()
   @ApiCreatedResponse({ type: MovieSessionResourceDTO })
+  @ApiNotFoundResponse({
+    description: 'Movie not found',
+  })
   create(
     @Body() data: CreateMovieSessionRequestDTO,
   ): Promise<MovieSessionResourceDTO> {
@@ -39,6 +42,9 @@ export class MovieSessionController {
 
   @Put(':id')
   @ApiOkResponse({ type: MovieSessionResourceDTO })
+  @ApiNotFoundResponse({
+    description: 'Movie session not found',
+  })
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: UpdateMovieSessionRequestDTO,
@@ -48,12 +54,18 @@ export class MovieSessionController {
 
   @Delete(':id')
   @ApiOkResponse({ description: 'Session deleted' })
+  @ApiNotFoundResponse({
+    description: 'Movie session not found',
+  })
   delete(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return this.movieSessionOrchestrator.delete(id);
   }
 
   @Get()
   @ApiOkResponse({ type: PaginatedMovieSessionResourcesDTO })
+  @ApiNotFoundResponse({
+    description: 'Movie not found',
+  })
   list(
     @Query() query: ListMovieSessionsRequestDTO,
   ): Promise<PaginatedMovieSessionResourcesDTO> {

@@ -9,7 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOkResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 import { MovieOrchestrator } from './movie.orchestrator';
 import {
@@ -32,6 +32,9 @@ export class MovieController {
 
   @Put(':id')
   @ApiOkResponse({ type: MovieResourceDTO })
+  @ApiNotFoundResponse({
+    description: 'Movie not found',
+  })
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: UpdateMovieRequestDTO,
@@ -41,6 +44,9 @@ export class MovieController {
 
   @Delete(':id')
   @ApiOkResponse({ description: 'Movie deleted' })
+  @ApiNotFoundResponse({
+    description: 'Movie not found',
+  })
   delete(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return this.movieOrchestrator.delete(id);
   }
