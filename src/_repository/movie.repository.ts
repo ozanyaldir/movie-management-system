@@ -32,6 +32,7 @@ export class MovieRepository {
       .createQueryBuilder('movie')
       .where('movie.guid = :guid', { guid: guid })
       .andWhere('movie.deletedAt IS NULL')
+      .leftJoinAndSelect('movie.sessions', 'sessions')
       .getOne();
   }
 

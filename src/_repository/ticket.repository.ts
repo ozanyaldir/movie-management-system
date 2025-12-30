@@ -39,6 +39,8 @@ export class TicketRepository {
     return await this.repository
       .createQueryBuilder('ticket')
       .where('ticket.guid = :guid', { guid: guid })
+      .leftJoinAndSelect('ticket.session', 'session')
+      .leftJoinAndSelect('session.movie', 'movie')
       .getOne();
   }
 
@@ -53,6 +55,8 @@ export class TicketRepository {
     const [result, total] = await this.repository
       .createQueryBuilder('ticket')
       .where('ticket.userId = :userId', { userId: userId })
+      .leftJoinAndSelect('ticket.session', 'session')
+      .leftJoinAndSelect('session.movie', 'movie')
       .addOrderBy(`ticket.createdAt`, 'DESC')
       .skip(skip)
       .take(take)
