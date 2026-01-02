@@ -102,7 +102,7 @@ Returns JWT
 | Method | Endpoint | Role |
 |------|---------|------|
 | POST | /tickets/buy | Customer |
-| POST | /tickets/:id/use | Manager |
+| POST | /tickets/:id/use | Customer |
 | GET | /tickets | Customer |
 
 ## 📖 Swagger Docs
