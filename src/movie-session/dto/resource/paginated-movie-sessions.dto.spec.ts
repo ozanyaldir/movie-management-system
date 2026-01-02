@@ -18,21 +18,13 @@ describe('newPaginatedMovieSessionResourceDTO', () => {
       guid: 's2',
     });
 
-    const result = newPaginatedMovieSessionResourceDTO(
-      [s1, s2],
-      12,
-      2,
-      6,
-    );
+    const result = newPaginatedMovieSessionResourceDTO([s1, s2], 12, 2, 6);
 
     expect(result.total).toBe(12);
     expect(result.page).toBe(2);
     expect(result.size).toBe(6);
 
-    expect(result.data).toEqual([
-      { guid: 's1' },
-      { guid: 's2' },
-    ]);
+    expect(result.data).toEqual([{ guid: 's1' }, { guid: 's2' }]);
 
     expect(newMovieSessionResourceFromEntity).toHaveBeenCalledTimes(2);
     expect(newMovieSessionResourceFromEntity).toHaveBeenCalledWith(s1);

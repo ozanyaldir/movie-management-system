@@ -22,9 +22,7 @@ describe('AuthController', () => {
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
-    orchestrator = module.get(
-      AuthOrchestrator,
-    ) as jest.Mocked<AuthOrchestrator>;
+    orchestrator = module.get(AuthOrchestrator);
   });
 
   it('should delegate register to orchestrator', async () => {

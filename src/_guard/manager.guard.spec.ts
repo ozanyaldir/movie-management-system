@@ -12,7 +12,7 @@ describe('ManagerGuard', () => {
         getResponse: () => ({}),
         getNext: () => ({}),
       }),
-    } as any);
+    }) as any;
 
   beforeEach(() => {
     guard = new ManagerGuard();

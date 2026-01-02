@@ -103,10 +103,7 @@ describe('MovieSessionService', () => {
 
       const result = await service.getDetailedByGuid('session-guid');
 
-      expect(repository.getByGuid).toHaveBeenCalledWith(
-        'session-guid',
-        true,
-      );
+      expect(repository.getByGuid).toHaveBeenCalledWith('session-guid', true);
       expect(result).toBe(session);
     });
   });

@@ -1,4 +1,4 @@
-import { AuthResourceDTO, newAuthResource } from "./auth.dto";
+import { AuthResourceDTO, newAuthResource } from './auth.dto';
 
 describe('AuthResourceDTO', () => {
   it('should create a resource dto with token', () => {

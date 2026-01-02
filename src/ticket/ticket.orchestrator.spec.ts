@@ -40,10 +40,7 @@ describe('TicketOrchestrator', () => {
       list: jest.fn(),
     } as any;
 
-    orchestrator = new TicketOrchestrator(
-      movieSessionService,
-      ticketService,
-    );
+    orchestrator = new TicketOrchestrator(movieSessionService, ticketService);
   });
 
   describe('buyTicket', () => {
@@ -73,15 +70,10 @@ describe('TicketOrchestrator', () => {
       expect(movieSessionService.getPlainByGuid).toHaveBeenCalledWith(
         'session-guid',
       );
-      expect(newTicketFromUserAndSession).toHaveBeenCalledWith(
-        user,
-        session,
-      );
+      expect(newTicketFromUserAndSession).toHaveBeenCalledWith(user, session);
       expect(ticketService.create).toHaveBeenCalledWith(ticketEntity);
       expect(ticketService.getDetailedById).toHaveBeenCalledWith(10);
-      expect(newTicketResourceFromEntity).toHaveBeenCalledWith(
-        detailedTicket,
-      );
+      expect(newTicketResourceFromEntity).toHaveBeenCalledWith(detailedTicket);
       expect(result).toBe(resource);
     });
 
@@ -171,12 +163,7 @@ describe('TicketOrchestrator', () => {
 
       const result = await orchestrator.list(user, query);
 
-      expect(ticketService.list).toHaveBeenCalledWith(
-        1,
-        true,
-        2,
-        10,
-      );
+      expect(ticketService.list).toHaveBeenCalledWith(1, true, 2, 10);
 
       expect(newPaginatedTicketResourceDTO).toHaveBeenCalledWith(
         rows,

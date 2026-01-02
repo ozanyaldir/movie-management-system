@@ -119,10 +119,9 @@ describe('MovieSessionRepository', () => {
 
       expect(ormRepo.createQueryBuilder).toHaveBeenCalledWith('movieSession');
 
-      expect(qb.where).toHaveBeenCalledWith(
-        'movieSession.movieId = :movieId',
-        { movieId: 22 },
-      );
+      expect(qb.where).toHaveBeenCalledWith('movieSession.movieId = :movieId', {
+        movieId: 22,
+      });
 
       expect(qb.andWhere).toHaveBeenCalledWith(
         'movieSession.deletedAt IS NULL',

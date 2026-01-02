@@ -17,7 +17,7 @@ describe('TicketNotFoundException', () => {
   it('creates exception with guid-specific message', () => {
     const ex = new TicketNotFoundException('tkt-123');
 
-      const response = ex.getResponse() as any;
+    const response = ex.getResponse() as any;
 
     expect(response).toEqual({
       code: 'ticket_not_found',

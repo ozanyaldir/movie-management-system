@@ -71,23 +71,23 @@ describe('MovieRepository', () => {
   });
 
   describe('getById', () => {
-      it('should fetch without relations when detailed = false', async () => {
-        await repo.getById(1, false);
+    it('should fetch without relations when detailed = false', async () => {
+      await repo.getById(1, false);
 
-        expect(ormRepo.findOne).toHaveBeenCalledWith({
-          where: { id: 1 },
-          relations: [],
-        });
+      expect(ormRepo.findOne).toHaveBeenCalledWith({
+        where: { id: 1 },
+        relations: [],
       });
+    });
 
-      it('should fetch with relations when detailed = true', async () => {
-        await repo.getById(1, true);
+    it('should fetch with relations when detailed = true', async () => {
+      await repo.getById(1, true);
 
-        expect(ormRepo.findOne).toHaveBeenCalledWith({
-          where: { id: 1 },
-          relations: ['sessions'],
-        });
+      expect(ormRepo.findOne).toHaveBeenCalledWith({
+        where: { id: 1 },
+        relations: ['sessions'],
       });
+    });
   });
 
   describe('getByGuid', () => {
@@ -122,10 +122,7 @@ describe('MovieRepository', () => {
       expect(qb.skip).toHaveBeenCalledWith(0);
       expect(qb.take).toHaveBeenCalledWith(20);
 
-      expect(qb.addOrderBy).toHaveBeenCalledWith(
-        'movie.createdAt',
-        'DESC',
-      );
+      expect(qb.addOrderBy).toHaveBeenCalledWith('movie.createdAt', 'DESC');
 
       expect(result).toEqual([sample, 1, 1, 20]);
     });
@@ -135,10 +132,7 @@ describe('MovieRepository', () => {
 
       await repo.list(SortMoviesBy.Title, 2, 10);
 
-      expect(qb.addOrderBy).toHaveBeenCalledWith(
-        'movie.title',
-        'ASC',
-      );
+      expect(qb.addOrderBy).toHaveBeenCalledWith('movie.title', 'ASC');
 
       expect(qb.skip).toHaveBeenCalledWith(10);
       expect(qb.take).toHaveBeenCalledWith(10);
@@ -149,10 +143,7 @@ describe('MovieRepository', () => {
 
       await repo.list(SortMoviesBy.MinAllowedAge, 1, 5);
 
-      expect(qb.addOrderBy).toHaveBeenCalledWith(
-        'movie.minAllowedAge',
-        'ASC',
-      );
+      expect(qb.addOrderBy).toHaveBeenCalledWith('movie.minAllowedAge', 'ASC');
 
       expect(qb.skip).toHaveBeenCalledWith(0);
       expect(qb.take).toHaveBeenCalledWith(5);

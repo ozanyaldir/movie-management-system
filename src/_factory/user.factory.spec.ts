@@ -5,9 +5,7 @@ import { newUserFromRegisterRequestDTO } from './user.factory';
 describe('newUserFromRegisterRequestDTO', () => {
   const passwordHash = 'hashed-password-123';
 
-  function makeDto(
-    dto: Partial<RegisterRequestDTO> = {},
-  ): RegisterRequestDTO {
+  function makeDto(dto: Partial<RegisterRequestDTO> = {}): RegisterRequestDTO {
     return {
       username: 'ozan',
       password: 'plainPassword',

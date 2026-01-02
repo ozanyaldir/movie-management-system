@@ -66,10 +66,7 @@ describe('TicketRepository', () => {
     it('should update isUsed to true', async () => {
       await repo.setUsed(11);
 
-      expect(ormRepo.update).toHaveBeenCalledWith(
-        { id: 11 },
-        { isUsed: true },
-      );
+      expect(ormRepo.update).toHaveBeenCalledWith({ id: 11 }, { isUsed: true });
     });
   });
 
@@ -122,10 +119,9 @@ describe('TicketRepository', () => {
 
       expect(ormRepo.createQueryBuilder).toHaveBeenCalledWith('ticket');
 
-      expect(qb.where).toHaveBeenCalledWith(
-        'ticket.userId = :userId',
-        { userId: 44 },
-      );
+      expect(qb.where).toHaveBeenCalledWith('ticket.userId = :userId', {
+        userId: 44,
+      });
 
       expect(qb.leftJoinAndSelect).toHaveBeenCalledWith(
         'ticket.session',
@@ -136,10 +132,7 @@ describe('TicketRepository', () => {
         'movie',
       );
 
-      expect(qb.addOrderBy).toHaveBeenCalledWith(
-        'ticket.createdAt',
-        'DESC',
-      );
+      expect(qb.addOrderBy).toHaveBeenCalledWith('ticket.createdAt', 'DESC');
 
       expect(qb.skip).toHaveBeenCalledWith(10);
       expect(qb.take).toHaveBeenCalledWith(10);
@@ -152,10 +145,9 @@ describe('TicketRepository', () => {
 
       await repo.list(12, true, 1, 20);
 
-      expect(qb.andWhere).toHaveBeenCalledWith(
-        'ticket.isUsed = :isUsed',
-        { isUsed: true },
-      );
+      expect(qb.andWhere).toHaveBeenCalledWith('ticket.isUsed = :isUsed', {
+        isUsed: true,
+      });
     });
 
     it('should NOT add isUsed filter when value is null', async () => {

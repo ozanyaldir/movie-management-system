@@ -20,10 +20,7 @@ describe('AuthService', () => {
     process.env.JWT_SECRET = 'test-secret';
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        { provide: JwtService, useValue: jwtService },
-      ],
+      providers: [AuthService, { provide: JwtService, useValue: jwtService }],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -41,14 +38,14 @@ describe('AuthService', () => {
   });
 
   describe('verifyPassword', () => {
-      it('compares password and hash using bcrypt', async () => {
-        (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+    it('compares password and hash using bcrypt', async () => {
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
-        const result = await service.verifyPassword('plain', 'hashed');
+      const result = await service.verifyPassword('plain', 'hashed');
 
-        expect(bcrypt.compare).toHaveBeenCalledWith('plain', 'hashed');
-        expect(result).toBe(true);
-      });
+      expect(bcrypt.compare).toHaveBeenCalledWith('plain', 'hashed');
+      expect(result).toBe(true);
+    });
   });
 
   describe('generateJWT', () => {

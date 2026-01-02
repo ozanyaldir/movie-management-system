@@ -18,21 +18,13 @@ describe('newPaginatedMovieResourceDTO', () => {
       guid: 'm2',
     });
 
-    const result = newPaginatedMovieResourceDTO(
-      [movie1, movie2],
-      10,
-      2,
-      5,
-    );
+    const result = newPaginatedMovieResourceDTO([movie1, movie2], 10, 2, 5);
 
     expect(result.total).toBe(10);
     expect(result.page).toBe(2);
     expect(result.size).toBe(5);
 
-    expect(result.data).toEqual([
-      { guid: 'm1' },
-      { guid: 'm2' },
-    ]);
+    expect(result.data).toEqual([{ guid: 'm1' }, { guid: 'm2' }]);
 
     expect(newMovieResourceFromEntity).toHaveBeenCalledTimes(2);
     expect(newMovieResourceFromEntity).toHaveBeenCalledWith(movie1);

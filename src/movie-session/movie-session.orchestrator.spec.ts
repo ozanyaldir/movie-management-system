@@ -13,12 +13,8 @@ import {
   newMovieSessionFromCreateRequestDTO,
   newMovieSessionFromUpdateRequestDTO,
 } from 'src/_factory';
-import {
-  newMovieSessionResourceFromEntity,
-} from 'src/_shared/dto/resource';
-import {
-  newPaginatedMovieSessionResourceDTO,
-} from './dto/resource';
+import { newMovieSessionResourceFromEntity } from 'src/_shared/dto/resource';
+import { newPaginatedMovieSessionResourceDTO } from './dto/resource';
 
 jest.mock('src/_factory', () => ({
   newMovieSessionFromCreateRequestDTO: jest.fn(),
@@ -67,19 +63,26 @@ describe('MovieSessionOrchestrator', () => {
       movieService.getPlainByGuid.mockResolvedValue(movie);
 
       const entity = { id: 7, guid: 'session-guid' } as any;
-      (newMovieSessionFromCreateRequestDTO as jest.Mock).mockReturnValue(entity);
+      (newMovieSessionFromCreateRequestDTO as jest.Mock).mockReturnValue(
+        entity,
+      );
       movieSessionService.create.mockResolvedValue(entity);
 
       const detailed = { id: 7 } as any;
       movieSessionService.getDetailedById.mockResolvedValue(detailed);
 
       const resource = { guid: 'session-guid' } as any;
-      (newMovieSessionResourceFromEntity as jest.Mock).mockReturnValue(resource);
+      (newMovieSessionResourceFromEntity as jest.Mock).mockReturnValue(
+        resource,
+      );
 
       const result = await orchestrator.create(dto);
 
       expect(movieService.getPlainByGuid).toHaveBeenCalledWith('movie-guid');
-      expect(newMovieSessionFromCreateRequestDTO).toHaveBeenCalledWith(dto, movie);
+      expect(newMovieSessionFromCreateRequestDTO).toHaveBeenCalledWith(
+        dto,
+        movie,
+      );
       expect(movieSessionService.create).toHaveBeenCalledWith(entity);
       expect(movieSessionService.getDetailedById).toHaveBeenCalledWith(7);
       expect(newMovieSessionResourceFromEntity).toHaveBeenCalledWith(detailed);
@@ -126,13 +129,17 @@ describe('MovieSessionOrchestrator', () => {
       } as any);
 
       const entity = { id: 5 } as any;
-      (newMovieSessionFromUpdateRequestDTO as jest.Mock).mockReturnValue(entity);
+      (newMovieSessionFromUpdateRequestDTO as jest.Mock).mockReturnValue(
+        entity,
+      );
 
       const detailed = { id: 5 } as any;
       movieSessionService.getDetailedById.mockResolvedValue(detailed);
 
       const resource = { guid: 's1' } as any;
-      (newMovieSessionResourceFromEntity as jest.Mock).mockReturnValue(resource);
+      (newMovieSessionResourceFromEntity as jest.Mock).mockReturnValue(
+        resource,
+      );
 
       const result = await orchestrator.update('s1', dto);
 

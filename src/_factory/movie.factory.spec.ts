@@ -53,9 +53,7 @@ describe('Movie factory helpers', () => {
     it('should support missing properties entirely', () => {
       const dto: Partial<CreateMovieRequestDTO> = {};
 
-      const movie = newMovieFromUpdateRequestDTO(
-        dto as CreateMovieRequestDTO,
-      );
+      const movie = newMovieFromUpdateRequestDTO(dto as CreateMovieRequestDTO);
 
       expect(movie.title).toBeUndefined();
       expect(movie.minAllowedAge).toBeUndefined();

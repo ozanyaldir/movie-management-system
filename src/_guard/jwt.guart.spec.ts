@@ -16,7 +16,7 @@ describe('JWTGuard', () => {
         getResponse: () => ({}),
         getNext: () => ({}),
       }),
-    } as any);
+    }) as any;
 
   beforeEach(() => {
     jwtService = {
@@ -146,9 +146,9 @@ describe('JWTGuard', () => {
     it('throws UnauthorizedException when verify returns null', () => {
       jwtService.verify.mockReturnValueOnce(undefined as any);
 
-      expect(() =>
-        guard.extractJWTPayload(jwtService, 'Bearer x.y.z'),
-      ).toThrow(UnauthorizedException);
+      expect(() => guard.extractJWTPayload(jwtService, 'Bearer x.y.z')).toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

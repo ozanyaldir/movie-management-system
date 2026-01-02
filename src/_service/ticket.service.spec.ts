@@ -103,10 +103,7 @@ describe('TicketService', () => {
 
       const result = await service.getDetailedByGuid('ticket-guid');
 
-      expect(repository.getByGuid).toHaveBeenCalledWith(
-        'ticket-guid',
-        true,
-      );
+      expect(repository.getByGuid).toHaveBeenCalledWith('ticket-guid', true);
       expect(result).toBe(ticket);
     });
   });

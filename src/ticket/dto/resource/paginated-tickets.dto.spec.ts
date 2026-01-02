@@ -18,21 +18,13 @@ describe('newPaginatedTicketResourceDTO', () => {
       guid: 't2',
     });
 
-    const result = newPaginatedTicketResourceDTO(
-      [t1, t2],
-      8,
-      1,
-      4,
-    );
+    const result = newPaginatedTicketResourceDTO([t1, t2], 8, 1, 4);
 
     expect(result.total).toBe(8);
     expect(result.page).toBe(1);
     expect(result.size).toBe(4);
 
-    expect(result.data).toEqual([
-      { guid: 't1' },
-      { guid: 't2' },
-    ]);
+    expect(result.data).toEqual([{ guid: 't1' }, { guid: 't2' }]);
 
     expect(newTicketResourceFromEntity).toHaveBeenCalledTimes(2);
     expect(newTicketResourceFromEntity).toHaveBeenCalledWith(t1);

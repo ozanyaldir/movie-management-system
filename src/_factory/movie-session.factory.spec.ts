@@ -23,10 +23,7 @@ describe('MovieSession factory helpers', () => {
 
       const movie = makeMovie(5);
 
-      const session = newMovieSessionFromCreateRequestDTO(
-        dto as any,
-        movie,
-      );
+      const session = newMovieSessionFromCreateRequestDTO(dto as any, movie);
 
       expect(session).toBeInstanceOf(MovieSession);
       expect(session.movieId).toBe(5);
@@ -48,9 +45,7 @@ describe('MovieSession factory helpers', () => {
         room_number: 'B1',
       };
 
-      const session = newMovieSessionFromUpdateRequestDTO(
-        dto as any,
-      );
+      const session = newMovieSessionFromUpdateRequestDTO(dto as any);
 
       expect(session).toBeInstanceOf(MovieSession);
       expect(session.roomNumber).toBe('B1');
@@ -67,9 +62,7 @@ describe('MovieSession factory helpers', () => {
         room_number: undefined,
       };
 
-      const session = newMovieSessionFromUpdateRequestDTO(
-        dto as any,
-      );
+      const session = newMovieSessionFromUpdateRequestDTO(dto as any);
 
       expect(session.roomNumber).toBeUndefined();
       expect(session.screeningDate).toBeUndefined();
@@ -81,9 +74,7 @@ describe('MovieSession factory helpers', () => {
         screening_time: '',
       };
 
-      const session = newMovieSessionFromUpdateRequestDTO(
-        dto as any,
-      );
+      const session = newMovieSessionFromUpdateRequestDTO(dto as any);
 
       expect(session.screeningTime).toBeUndefined();
     });
@@ -93,9 +84,7 @@ describe('MovieSession factory helpers', () => {
         screening_time: '08:05',
       };
 
-      const session = newMovieSessionFromUpdateRequestDTO(
-        dto as any,
-      );
+      const session = newMovieSessionFromUpdateRequestDTO(dto as any);
 
       expect(session.screeningTime).toBe(
         moment('08:05', 'HH:mm').format('HH:mm:ss'),

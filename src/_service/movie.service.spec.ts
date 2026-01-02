@@ -105,10 +105,7 @@ describe('MovieService', () => {
 
       const result = await service.getDetailedByGuid('movie-guid');
 
-      expect(repository.getByGuid).toHaveBeenCalledWith(
-        'movie-guid',
-        true,
-      );
+      expect(repository.getByGuid).toHaveBeenCalledWith('movie-guid', true);
       expect(result).toBe(movie);
     });
   });
@@ -121,11 +118,7 @@ describe('MovieService', () => {
 
       const result = await service.list(SortMoviesBy.Title, 1, 20);
 
-      expect(repository.list).toHaveBeenCalledWith(
-        SortMoviesBy.Title,
-        1,
-        20,
-      );
+      expect(repository.list).toHaveBeenCalledWith(SortMoviesBy.Title, 1, 20);
       expect(result).toBe(expected);
     });
 

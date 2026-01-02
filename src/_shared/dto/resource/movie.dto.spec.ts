@@ -8,8 +8,8 @@ describe('newMovieResourceFromEntity', () => {
   });
 
   it('maps primitive fields and omits sessions when not provided', () => {
-    newMovieResourceFromEntity = require('./movie.dto')
-      .newMovieResourceFromEntity;
+    newMovieResourceFromEntity =
+      require('./movie.dto').newMovieResourceFromEntity;
 
     const movie = {
       guid: 'mov-1',
@@ -31,8 +31,8 @@ describe('newMovieResourceFromEntity', () => {
   });
 
   it('does NOT include sessions when array is empty', () => {
-    newMovieResourceFromEntity = require('./movie.dto')
-      .newMovieResourceFromEntity;
+    newMovieResourceFromEntity =
+      require('./movie.dto').newMovieResourceFromEntity;
 
     const movie = {
       guid: 'mov-2',
@@ -49,8 +49,8 @@ describe('newMovieResourceFromEntity', () => {
   });
 
   it('maps sessions when provided (length > 0)', () => {
-    newMovieResourceFromEntity = require('./movie.dto')
-      .newMovieResourceFromEntity;
+    newMovieResourceFromEntity =
+      require('./movie.dto').newMovieResourceFromEntity;
 
     const session = {
       guid: 'sess-1',
@@ -95,8 +95,8 @@ describe('newMovieResourceFromEntity', () => {
     jest.doMock('./movie-session.dto', () => mockMapper);
 
     jest.isolateModules(() => {
-      newMovieResourceFromEntity = require('./movie.dto')
-        .newMovieResourceFromEntity;
+      newMovieResourceFromEntity =
+        require('./movie.dto').newMovieResourceFromEntity;
     });
 
     const movie = {
@@ -109,13 +109,13 @@ describe('newMovieResourceFromEntity', () => {
 
     const dto = newMovieResourceFromEntity(movie);
 
-    expect(
-      mockMapper.newMovieSessionResourceFromEntity,
-    ).toHaveBeenCalledTimes(1);
+    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledTimes(
+      1,
+    );
 
-    expect(
-      mockMapper.newMovieSessionResourceFromEntity,
-    ).toHaveBeenCalledWith(session);
+    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledWith(
+      session,
+    );
 
     expect(dto.sessions?.[0].guid).toBe('mock-session');
   });

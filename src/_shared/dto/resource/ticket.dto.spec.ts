@@ -8,8 +8,8 @@ describe('newTicketResourceFromEntity', () => {
   });
 
   it('maps primitive fields and omits session when not provided', () => {
-    newTicketResourceFromEntity = require('./ticket.dto')
-      .newTicketResourceFromEntity;
+    newTicketResourceFromEntity =
+      require('./ticket.dto').newTicketResourceFromEntity;
 
     const ticket = {
       guid: 't-1',
@@ -29,8 +29,8 @@ describe('newTicketResourceFromEntity', () => {
   });
 
   it('maps session when provided', () => {
-    newTicketResourceFromEntity = require('./ticket.dto')
-      .newTicketResourceFromEntity;
+    newTicketResourceFromEntity =
+      require('./ticket.dto').newTicketResourceFromEntity;
 
     const session = {
       guid: 'sess-1',
@@ -77,8 +77,8 @@ describe('newTicketResourceFromEntity', () => {
     jest.doMock('./movie-session.dto', () => mockMapper);
 
     jest.isolateModules(() => {
-      newTicketResourceFromEntity = require('./ticket.dto')
-        .newTicketResourceFromEntity;
+      newTicketResourceFromEntity =
+        require('./ticket.dto').newTicketResourceFromEntity;
     });
 
     const ticket = {
@@ -91,13 +91,13 @@ describe('newTicketResourceFromEntity', () => {
 
     const dto = newTicketResourceFromEntity(ticket);
 
-    expect(
-      mockMapper.newMovieSessionResourceFromEntity,
-    ).toHaveBeenCalledTimes(1);
+    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledTimes(
+      1,
+    );
 
-    expect(
-      mockMapper.newMovieSessionResourceFromEntity,
-    ).toHaveBeenCalledWith(session);
+    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledWith(
+      session,
+    );
 
     expect(dto.session?.guid).toBe('mock-session');
   });

@@ -16,7 +16,7 @@ describe('GenericExceptionFilter', () => {
       switchToHttp: () => ({
         getResponse: () => mockReply,
       }),
-    } as any);
+    }) as any;
 
   beforeEach(() => {
     filter = new GenericExceptionFilter();

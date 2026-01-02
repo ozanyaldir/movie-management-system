@@ -30,9 +30,7 @@ describe('TicketController', () => {
       .compile();
 
     controller = module.get<TicketController>(TicketController);
-    orchestrator = module.get(
-      TicketOrchestrator,
-    ) as jest.Mocked<TicketOrchestrator>;
+    orchestrator = module.get(TicketOrchestrator);
   });
 
   it('should delegate buyTicket to orchestrator', async () => {

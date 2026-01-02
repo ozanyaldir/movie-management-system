@@ -9,12 +9,8 @@ import {
   newMovieFromCreateRequestDTO,
   newMovieFromUpdateRequestDTO,
 } from 'src/_factory';
-import {
-  newMovieResourceFromEntity,
-} from 'src/_shared/dto/resource';
-import {
-  newPaginatedMovieResourceDTO,
-} from './dto/resource';
+import { newMovieResourceFromEntity } from 'src/_shared/dto/resource';
+import { newPaginatedMovieResourceDTO } from './dto/resource';
 import { MovieNotFoundException } from 'src/_exception';
 
 jest.mock('src/_factory', () => ({
@@ -162,11 +158,7 @@ describe('MovieOrchestrator', () => {
 
       const result = await orchestrator.list(dto);
 
-      expect(movieService.list).toHaveBeenCalledWith(
-        dto.sort_by,
-        2,
-        10,
-      );
+      expect(movieService.list).toHaveBeenCalledWith(dto.sort_by, 2, 10);
 
       expect(newPaginatedMovieResourceDTO).toHaveBeenCalledWith(
         rows,

@@ -34,9 +34,7 @@ describe('MovieController', () => {
       .compile();
 
     controller = module.get<MovieController>(MovieController);
-    orchestrator = module.get(
-      MovieOrchestrator,
-    ) as jest.Mocked<MovieOrchestrator>;
+    orchestrator = module.get(MovieOrchestrator);
   });
 
   it('should delegate create to orchestrator', async () => {
