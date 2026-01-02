@@ -12,7 +12,7 @@ export class ManagerGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const currentUser = req.user as User;
 
-    if (currentUser.type !== UserType.Manager) {
+    if (!currentUser || currentUser.type !== UserType.Manager) {
       throw new ForbiddenException();
     }
 

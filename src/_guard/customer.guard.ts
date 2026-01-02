@@ -12,7 +12,7 @@ export class CustomerGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const currentUser = req.user as User;
 
-    if (currentUser.type !== UserType.Customer) {
+    if (!currentUser || currentUser.type !== UserType.Customer) {
       throw new ForbiddenException();
     }
 
