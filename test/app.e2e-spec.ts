@@ -1,4 +1,4 @@
-import { INestApplication, ServiceUnavailableException } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { AppController } from '../src/app.controller';

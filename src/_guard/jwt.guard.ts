@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JWTPayload } from 'src/_model';
-import { UserService } from 'src/_service';
+import { JWTPayload } from '../_model';
+import { UserService } from '../_service';
 
 @Injectable()
 export class JWTGuard implements CanActivate {

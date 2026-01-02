@@ -25,6 +25,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: AuthResourceDTO })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized',

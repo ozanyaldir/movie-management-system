@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -34,6 +36,7 @@ export class MovieController {
   constructor(private readonly movieOrchestrator: MovieOrchestrator) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UseGuards(ManagerGuard)
   @ApiCreatedResponse({ type: MovieResourceDTO })
   create(@Body() data: CreateMovieRequestDTO): Promise<MovieResourceDTO> {
@@ -41,6 +44,7 @@ export class MovieController {
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(ManagerGuard)
   @ApiOkResponse({ type: MovieResourceDTO })
   @ApiNotFoundResponse({
@@ -54,6 +58,7 @@ export class MovieController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(ManagerGuard)
   @ApiOkResponse({ description: 'Movie deleted' })
   @ApiNotFoundResponse({
@@ -64,6 +69,7 @@ export class MovieController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: PaginatedMovieResourcesDTO })
   list(
     @Query() query: ListMoviesRequestDTO,

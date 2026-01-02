@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -36,6 +38,7 @@ export class MovieSessionController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UseGuards(ManagerGuard)
   @ApiCreatedResponse({ type: MovieSessionResourceDTO })
   @ApiNotFoundResponse({
@@ -48,6 +51,7 @@ export class MovieSessionController {
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(ManagerGuard)
   @ApiOkResponse({ type: MovieSessionResourceDTO })
   @ApiNotFoundResponse({
@@ -61,6 +65,7 @@ export class MovieSessionController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(ManagerGuard)
   @ApiOkResponse({ description: 'Session deleted' })
   @ApiNotFoundResponse({
@@ -71,6 +76,7 @@ export class MovieSessionController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: PaginatedMovieSessionResourcesDTO })
   @ApiNotFoundResponse({
     description: 'Movie not found',

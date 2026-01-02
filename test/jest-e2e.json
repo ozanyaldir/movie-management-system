@@ -1,9 +1,23 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "rootDir": "../",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "transformIgnorePatterns": [
+    "node_modules/(?!uuid)"
+  ],
+  "moduleNameMapper": {
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^src/_guard(.*)$": "<rootDir>/src/_guard$1",
+    "^src/_service/(.*)$": "<rootDir>/src/_service/$1",
+    "^src/_repository/(.*)$": "<rootDir>/src/_repository/$1",
+    "^src/_factory/(.*)$": "<rootDir>/src/_factory/$1",
+    "^src/_shared/(.*)$": "<rootDir>/src/_shared/$1",
+    "^src/_exception/(.*)$": "<rootDir>/src/_exception/$1",
+    "^src/_decorator/(.*)$": "<rootDir>/src/_decorator/$1",
+    "^src/_model(.*)$": "<rootDir>/src/_model$1"
   }
 }

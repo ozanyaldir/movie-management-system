@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -29,6 +31,7 @@ export class TicketController {
   constructor(private readonly ticketOrchestrator: TicketOrchestrator) {}
 
   @Post('buy')
+  @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({ type: TicketResourceDTO })
   @ApiNotFoundResponse({
     description: 'Movie session not found',
@@ -41,6 +44,7 @@ export class TicketController {
   }
 
   @Post(':id/use')
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: TicketResourceDTO })
   @ApiNotFoundResponse({
     description: 'Ticket not found',
@@ -52,6 +56,7 @@ export class TicketController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: PaginatedTicketResourcesDTO })
   list(
     @CurrentUser() currentUser: User,
