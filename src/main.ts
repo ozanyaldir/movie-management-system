@@ -56,7 +56,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, docsConfig);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(3000, '127.0.0.1');
+  await app.listen(3000, '0.0.0.0');
 }
 
 bootstrap().catch((err) =>

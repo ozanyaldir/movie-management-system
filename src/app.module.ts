@@ -7,9 +7,13 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { MovieModule } from './movie/movie.module';
 import { MovieSessionModule } from './movie-session/movie-session.module';
 import { TicketModule } from './ticket/ticket.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
