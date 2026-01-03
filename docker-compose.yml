@@ -2,8 +2,8 @@ version: "3.9"
 
 services:
   api:
-    container_name: movie-api
-    image: movie-api:latest
+    container_name: movie-management-system
+    image: movie-management-system:latest
     restart: always
 
     env_file:

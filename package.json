@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "docker-build": "docker build --no-cache -t movie-management-system .",
+    "docker-compose-up": "docker compose up -d",
+    "docker-compose-down": "docker compose down"
   },
   "dependencies": {
     "@fastify/static": "^8.3.0",
@@ -39,14 +42,14 @@
     "swagger-ui-express": "^5.0.1",
     "typeorm": "^0.3.28",
     "typeorm-naming-strategies": "^4.1.0",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "@nestjs/swagger": "^11.2.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
-    "@nestjs/swagger": "^11.2.3",
     "@nestjs/testing": "^11.0.1",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.0",
