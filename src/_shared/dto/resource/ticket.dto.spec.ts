@@ -1,16 +1,9 @@
 import { Ticket, MovieSession } from 'src/_repository/_entity';
+import { TicketResourceDTO } from './ticket.dto';
+import { MovieSessionResourceDTO } from './movie-session.dto';
 
-describe('newTicketResourceFromEntity', () => {
-  let newTicketResourceFromEntity: any;
-
-  beforeEach(() => {
-    jest.resetModules();
-  });
-
-  it('maps primitive fields and omits session when not provided', () => {
-    newTicketResourceFromEntity =
-      require('./ticket.dto').newTicketResourceFromEntity;
-
+describe('TicketResourceDTO (constructor mapping)', () => {
+  it('maps primitive fields and keeps session undefined when not provided', () => {
     const ticket = {
       guid: 't-1',
       isUsed: true,
@@ -19,19 +12,14 @@ describe('newTicketResourceFromEntity', () => {
       sessionId: 10,
     } as unknown as Ticket;
 
-    const dto = newTicketResourceFromEntity(ticket);
+    const dto = new TicketResourceDTO(ticket);
 
-    expect(dto).toEqual({
-      guid: 't-1',
-      is_used: true,
-      session: undefined,
-    });
+    expect(dto.guid).toBe('t-1');
+    expect(dto.is_used).toBe(true);
+    expect(dto.session).toBeUndefined();
   });
 
   it('maps session when provided', () => {
-    newTicketResourceFromEntity =
-      require('./ticket.dto').newTicketResourceFromEntity;
-
     const session = {
       guid: 'sess-1',
       roomNumber: 'A1',
@@ -49,12 +37,12 @@ describe('newTicketResourceFromEntity', () => {
       userId: 2,
     } as unknown as Ticket;
 
-    const dto = newTicketResourceFromEntity(ticket);
+    const dto = new TicketResourceDTO(ticket);
 
     expect(dto.guid).toBe('t-2');
     expect(dto.is_used).toBe(false);
 
-    expect(dto.session).toEqual({
+    expect(dto.session).toMatchObject({
       guid: 'sess-1',
       room_number: 'A1',
       screening_date: new Date('2025-01-01'),
@@ -62,24 +50,8 @@ describe('newTicketResourceFromEntity', () => {
     });
   });
 
-  it('delegates mapping to newMovieSessionResourceFromEntity()', () => {
+  it('creates MovieSessionResourceDTO when session exists', () => {
     const session = {} as MovieSession;
-
-    const mockMapper = {
-      newMovieSessionResourceFromEntity: jest.fn().mockReturnValue({
-        guid: 'mock-session',
-        room_number: 'X',
-        screening_date: new Date('2025-03-01'),
-        screening_time: '14:00',
-      }),
-    };
-
-    jest.doMock('./movie-session.dto', () => mockMapper);
-
-    jest.isolateModules(() => {
-      newTicketResourceFromEntity =
-        require('./ticket.dto').newTicketResourceFromEntity;
-    });
 
     const ticket = {
       guid: 't-3',
@@ -89,16 +61,8 @@ describe('newTicketResourceFromEntity', () => {
       sessionId: 9,
     } as unknown as Ticket;
 
-    const dto = newTicketResourceFromEntity(ticket);
+    const dto = new TicketResourceDTO(ticket);
 
-    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledTimes(
-      1,
-    );
-
-    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledWith(
-      session,
-    );
-
-    expect(dto.session?.guid).toBe('mock-session');
+    expect(dto.session).toBeInstanceOf(MovieSessionResourceDTO);
   });
 });

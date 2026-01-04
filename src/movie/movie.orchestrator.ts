@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  newPaginatedMovieResourceDTO,
-  PaginatedMovieResourcesDTO,
-} from './dto/resource';
+import { PaginatedMovieResourceDTO } from './dto/resource';
 import { MovieService } from 'src/_service';
 import {
   CreateMovieRequestDTO,
@@ -14,10 +11,7 @@ import {
   newMovieFromUpdateRequestDTO,
 } from 'src/_factory';
 import { MovieNotFoundException } from 'src/_exception';
-import {
-  MovieResourceDTO,
-  newMovieResourceFromEntity,
-} from 'src/_shared/dto/resource';
+import { MovieResourceDTO } from 'src/_shared/dto/resource';
 
 @Injectable()
 export class MovieOrchestrator {
@@ -33,7 +27,8 @@ export class MovieOrchestrator {
     if (!updatedMovie) {
       throw new MovieNotFoundException(createdMovie.guid);
     }
-    return newMovieResourceFromEntity(updatedMovie);
+
+    return new MovieResourceDTO(updatedMovie);
   }
 
   async update(
@@ -52,7 +47,8 @@ export class MovieOrchestrator {
     if (!updatedMovie) {
       throw new MovieNotFoundException(id);
     }
-    return newMovieResourceFromEntity(updatedMovie);
+
+    return new MovieResourceDTO(updatedMovie);
   }
 
   async delete(id: string): Promise<void> {
@@ -64,13 +60,13 @@ export class MovieOrchestrator {
     await this.movieService.delete(movie.id);
   }
 
-  async list(query: ListMoviesRequestDTO): Promise<PaginatedMovieResourcesDTO> {
+  async list(query: ListMoviesRequestDTO): Promise<PaginatedMovieResourceDTO> {
     const [result, total, page, size] = await this.movieService.list(
       query.sort_by,
       query.page,
       query.size,
     );
 
-    return newPaginatedMovieResourceDTO(result, total, page, size);
+    return new PaginatedMovieResourceDTO(result, total, page, size);
   }
 }

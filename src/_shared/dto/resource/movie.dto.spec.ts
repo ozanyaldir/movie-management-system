@@ -1,16 +1,9 @@
 import { Movie, MovieSession } from 'src/_repository/_entity';
+import { MovieResourceDTO } from './movie.dto';
+import { MovieSessionResourceDTO } from './movie-session.dto';
 
-describe('newMovieResourceFromEntity', () => {
-  let newMovieResourceFromEntity: any;
-
-  beforeEach(() => {
-    jest.resetModules();
-  });
-
-  it('maps primitive fields and omits sessions when not provided', () => {
-    newMovieResourceFromEntity =
-      require('./movie.dto').newMovieResourceFromEntity;
-
+describe('MovieResourceDTO (constructor mapping)', () => {
+  it('maps primitive fields and keeps sessions undefined when not provided', () => {
     const movie = {
       guid: 'mov-1',
       title: 'Inception',
@@ -19,21 +12,17 @@ describe('newMovieResourceFromEntity', () => {
       sessions: undefined,
     } as unknown as Movie;
 
-    const dto = newMovieResourceFromEntity(movie);
+    const dto = new MovieResourceDTO(movie);
 
-    expect(dto).toEqual({
-      guid: 'mov-1',
-      title: 'Inception',
-      min_allowed_age: 13,
-    });
+    expect(dto.guid).toBe('mov-1');
+    expect(dto.title).toBe('Inception');
+    expect(dto.min_allowed_age).toBe(13);
 
     expect(dto.sessions).toBeUndefined();
+    expect(Object.prototype.hasOwnProperty.call(dto, 'sessions')).toBe(true);
   });
 
-  it('does NOT include sessions when array is empty', () => {
-    newMovieResourceFromEntity =
-      require('./movie.dto').newMovieResourceFromEntity;
-
+  it('keeps sessions undefined when array is empty', () => {
     const movie = {
       guid: 'mov-2',
       title: 'Interstellar',
@@ -42,16 +31,13 @@ describe('newMovieResourceFromEntity', () => {
       sessions: [],
     } as unknown as Movie;
 
-    const dto = newMovieResourceFromEntity(movie);
+    const dto = new MovieResourceDTO(movie);
 
     expect(dto.sessions).toBeUndefined();
-    expect(Object.prototype.hasOwnProperty.call(dto, 'sessions')).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(dto, 'sessions')).toBe(true);
   });
 
   it('maps sessions when provided (length > 0)', () => {
-    newMovieResourceFromEntity =
-      require('./movie.dto').newMovieResourceFromEntity;
-
     const session = {
       guid: 'sess-1',
       roomNumber: 'A1',
@@ -69,10 +55,11 @@ describe('newMovieResourceFromEntity', () => {
       sessions: [session],
     } as unknown as Movie;
 
-    const dto = newMovieResourceFromEntity(movie);
+    const dto = new MovieResourceDTO(movie);
 
     expect(dto.sessions).toHaveLength(1);
-    expect(dto.sessions?.[0]).toEqual({
+
+    expect(dto.sessions?.[0]).toMatchObject({
       guid: 'sess-1',
       room_number: 'A1',
       screening_date: new Date('2025-01-01'),
@@ -80,24 +67,8 @@ describe('newMovieResourceFromEntity', () => {
     });
   });
 
-  it('delegates each session to newMovieSessionResourceFromEntity()', () => {
+  it('creates MovieSessionResourceDTO instances for each session', () => {
     const session = {} as MovieSession;
-
-    const mockMapper = {
-      newMovieSessionResourceFromEntity: jest.fn().mockReturnValue({
-        guid: 'mock-session',
-        room_number: 'X',
-        screening_date: new Date('2025-02-01'),
-        screening_time: '18:00',
-      }),
-    };
-
-    jest.doMock('./movie-session.dto', () => mockMapper);
-
-    jest.isolateModules(() => {
-      newMovieResourceFromEntity =
-        require('./movie.dto').newMovieResourceFromEntity;
-    });
 
     const movie = {
       guid: 'mov-4',
@@ -107,16 +78,8 @@ describe('newMovieResourceFromEntity', () => {
       sessions: [session],
     } as unknown as Movie;
 
-    const dto = newMovieResourceFromEntity(movie);
+    const dto = new MovieResourceDTO(movie);
 
-    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledTimes(
-      1,
-    );
-
-    expect(mockMapper.newMovieSessionResourceFromEntity).toHaveBeenCalledWith(
-      session,
-    );
-
-    expect(dto.sessions?.[0].guid).toBe('mock-session');
+    expect(dto.sessions?.[0]).toBeInstanceOf(MovieSessionResourceDTO);
   });
 });

@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginRequestDTO, RegisterRequestDTO } from './dto/request';
-import { AuthResourceDTO, newAuthResource } from './dto/resource';
+import { AuthResourceDTO } from './dto/resource';
 import { AuthService } from 'src/_service/auth.service';
 import { UserService } from 'src/_service/user.service';
 import { newUserFromRegisterRequestDTO } from 'src/_factory/user.factory';
@@ -25,11 +25,10 @@ export class AuthOrchestrator {
     }
 
     const passwordHash = await this.authService.hashPassword(data.password);
-
     const m = newUserFromRegisterRequestDTO(data, passwordHash);
     const createdUser = await this.userService.createNewUser(m);
     const jwt = await this.authService.generateJWT(createdUser);
-    return newAuthResource(jwt);
+    return new AuthResourceDTO(jwt);
   }
 
   async login(data: LoginRequestDTO): Promise<AuthResourceDTO> {
@@ -49,6 +48,6 @@ export class AuthOrchestrator {
     }
 
     const jwt = await this.authService.generateJWT(existingUser);
-    return newAuthResource(jwt);
+    return new AuthResourceDTO(jwt);
   }
 }

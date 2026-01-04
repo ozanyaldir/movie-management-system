@@ -1,17 +1,15 @@
-import { AuthResourceDTO, newAuthResource } from './auth.dto';
+import { AuthResourceDTO } from './auth.dto';
 
-describe('AuthResourceDTO', () => {
+describe('AuthResourceDTO (constructor mapping)', () => {
   it('should create a resource dto with token', () => {
-    const dto = newAuthResource('abc123');
+    const dto = new AuthResourceDTO('abc123');
 
-    expect(dto).toBeInstanceOf(Object);
-    expect(dto).toMatchObject<AuthResourceDTO>({
-      token: 'abc123',
-    });
+    expect(dto).toBeInstanceOf(AuthResourceDTO);
+    expect(dto.token).toBe('abc123');
   });
 
   it('should allow empty token string', () => {
-    const dto = newAuthResource('');
+    const dto = new AuthResourceDTO('');
 
     expect(dto.token).toBe('');
   });

@@ -1,8 +1,8 @@
-import { newMovieSessionResourceFromEntity } from './movie-session.dto';
 import { MovieSession, Movie, Ticket } from 'src/_repository/_entity';
+import { MovieSessionResourceDTO } from './movie-session.dto';
 
-describe('newMovieSessionResourceFromEntity', () => {
-  it('maps primitive fields and omits movie & tickets when not provided', () => {
+describe('MovieSessionResourceDTO (constructor mapping)', () => {
+  it('maps primitive fields and keeps movie & tickets as undefined when not provided', () => {
     const entity = {
       guid: 'sess-1',
       roomNumber: 'A1',
@@ -12,14 +12,12 @@ describe('newMovieSessionResourceFromEntity', () => {
       tickets: undefined,
     } as unknown as MovieSession;
 
-    const dto = newMovieSessionResourceFromEntity(entity);
+    const dto = new MovieSessionResourceDTO(entity);
 
-    expect(dto).toEqual({
-      guid: 'sess-1',
-      room_number: 'A1',
-      screening_date: new Date('2025-01-01'),
-      screening_time: '10:00:00',
-    });
+    expect(dto.guid).toBe('sess-1');
+    expect(dto.room_number).toBe('A1');
+    expect(dto.screening_date).toEqual(new Date('2025-01-01'));
+    expect(dto.screening_time).toBe('10:00:00');
 
     expect(dto.movie).toBeUndefined();
     expect(dto.tickets).toBeUndefined();
@@ -42,12 +40,13 @@ describe('newMovieSessionResourceFromEntity', () => {
       tickets: [],
     } as unknown as MovieSession;
 
-    const dto = newMovieSessionResourceFromEntity(entity);
+    const dto = new MovieSessionResourceDTO(entity);
 
     expect(dto.movie).toEqual({
       guid: 'mov-1',
       title: 'Inception',
       min_allowed_age: 13,
+      sessions: undefined,
     });
   });
 
@@ -67,16 +66,17 @@ describe('newMovieSessionResourceFromEntity', () => {
       movie: undefined,
     } as unknown as MovieSession;
 
-    const dto = newMovieSessionResourceFromEntity(entity);
+    const dto = new MovieSessionResourceDTO(entity);
 
     expect(dto.tickets).toHaveLength(1);
     expect(dto.tickets?.[0]).toEqual({
       guid: 't-1',
       is_used: false,
+      session: undefined,
     });
   });
 
-  it('does NOT include tickets property when array is empty', () => {
+  it('keeps tickets as undefined when array is empty', () => {
     const entity = {
       guid: 'sess-4',
       roomNumber: 'D4',
@@ -86,9 +86,9 @@ describe('newMovieSessionResourceFromEntity', () => {
       movie: undefined,
     } as unknown as MovieSession;
 
-    const dto = newMovieSessionResourceFromEntity(entity);
+    const dto = new MovieSessionResourceDTO(entity);
 
     expect(dto.tickets).toBeUndefined();
-    expect(Object.prototype.hasOwnProperty.call(dto, 'tickets')).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(dto, 'tickets')).toBe(true);
   });
 });

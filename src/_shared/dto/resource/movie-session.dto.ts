@@ -1,6 +1,6 @@
 import { MovieSession } from 'src/_repository/_entity';
-import { MovieResourceDTO, newMovieResourceFromEntity } from './movie.dto';
-import { newTicketResourceFromEntity, TicketResourceDTO } from './ticket.dto';
+import { MovieResourceDTO } from './movie.dto';
+import { TicketResourceDTO } from './ticket.dto';
 
 export class MovieSessionResourceDTO {
   guid: string;
@@ -9,20 +9,22 @@ export class MovieSessionResourceDTO {
   screening_time: string;
   movie: MovieResourceDTO | undefined;
   tickets: TicketResourceDTO[] | undefined;
-}
 
-export function newMovieSessionResourceFromEntity(
-  m: MovieSession,
-): MovieSessionResourceDTO {
-  const tickets = m.tickets ?? [];
-  return {
-    guid: m.guid,
-    room_number: m.roomNumber,
-    screening_date: m.screeningDate,
-    screening_time: m.screeningTime,
-    movie: m.movie ? newMovieResourceFromEntity(m.movie) : undefined,
-    ...(tickets.length > 0 && {
-      tickets: tickets.map((t) => newTicketResourceFromEntity(t)),
-    }),
-  } as MovieSessionResourceDTO;
+  constructor(session: MovieSession) {
+    const tickets = session.tickets ?? [];
+
+    this.guid = session.guid;
+    this.room_number = session.roomNumber;
+    this.screening_date = session.screeningDate;
+    this.screening_time = session.screeningTime;
+
+    this.movie = session.movie
+      ? new MovieResourceDTO(session.movie)
+      : undefined;
+
+    this.tickets =
+      tickets.length > 0
+        ? tickets.map((t) => new TicketResourceDTO(t))
+        : undefined;
+  }
 }

@@ -25,7 +25,7 @@ import {
   ListMoviesRequestDTO,
   UpdateMovieRequestDTO,
 } from './dto/request';
-import { PaginatedMovieResourcesDTO } from './dto/resource';
+import { PaginatedMovieResourceDTO } from './dto/resource';
 import { JWTGuard, ManagerGuard } from 'src/_guard';
 import { MovieResourceDTO } from 'src/_shared/dto/resource';
 
@@ -70,10 +70,10 @@ export class MovieController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: PaginatedMovieResourcesDTO })
+  @ApiOkResponse({ type: PaginatedMovieResourceDTO })
   list(
     @Query() query: ListMoviesRequestDTO,
-  ): Promise<PaginatedMovieResourcesDTO> {
+  ): Promise<PaginatedMovieResourceDTO> {
     return this.movieOrchestrator.list(query);
   }
 }

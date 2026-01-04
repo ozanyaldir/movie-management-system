@@ -3,15 +3,11 @@ import { AuthService } from 'src/_service/auth.service';
 import { UserService } from 'src/_service/user.service';
 import { LoginRequestDTO, RegisterRequestDTO } from './dto/request';
 import { newUserFromRegisterRequestDTO } from 'src/_factory/user.factory';
-import { newAuthResource } from './dto/resource';
+import { AuthResourceDTO } from './dto/resource';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 jest.mock('src/_factory/user.factory', () => ({
   newUserFromRegisterRequestDTO: jest.fn(),
-}));
-
-jest.mock('./dto/resource', () => ({
-  newAuthResource: jest.fn(),
 }));
 
 describe('AuthOrchestrator', () => {
@@ -52,9 +48,6 @@ describe('AuthOrchestrator', () => {
 
       authService.generateJWT.mockResolvedValue('jwt-token');
 
-      const resource = { token: 'jwt-token' } as any;
-      (newAuthResource as jest.Mock).mockReturnValue(resource);
-
       const result = await orchestrator.register(dto);
 
       expect(userService.getPlainByUsername).toHaveBeenCalledWith('ozan');
@@ -65,8 +58,9 @@ describe('AuthOrchestrator', () => {
       );
       expect(userService.createNewUser).toHaveBeenCalledWith(userEntity);
       expect(authService.generateJWT).toHaveBeenCalledWith(createdUser);
-      expect(newAuthResource).toHaveBeenCalledWith('jwt-token');
-      expect(result).toBe(resource);
+
+      expect(result).toBeInstanceOf(AuthResourceDTO);
+      expect(result.token).toBe('jwt-token');
     });
 
     it('should throw BadRequestException when username already exists', async () => {
@@ -93,9 +87,6 @@ describe('AuthOrchestrator', () => {
       authService.verifyPassword.mockResolvedValue(true);
       authService.generateJWT.mockResolvedValue('jwt-token');
 
-      const resource = { token: 'jwt-token' } as any;
-      (newAuthResource as jest.Mock).mockReturnValue(resource);
-
       const result = await orchestrator.login(dto);
 
       expect(userService.getPlainByUsername).toHaveBeenCalledWith('ozan');
@@ -104,8 +95,9 @@ describe('AuthOrchestrator', () => {
         'hash',
       );
       expect(authService.generateJWT).toHaveBeenCalledWith(user);
-      expect(newAuthResource).toHaveBeenCalledWith('jwt-token');
-      expect(result).toBe(resource);
+
+      expect(result).toBeInstanceOf(AuthResourceDTO);
+      expect(result.token).toBe('jwt-token');
     });
 
     it('should throw UnauthorizedException when user not found', async () => {

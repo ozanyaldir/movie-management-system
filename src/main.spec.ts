@@ -82,6 +82,6 @@ describe('bootstrap (main.ts)', () => {
     expect(enableCorsMock).toHaveBeenCalled();
     expect(useGlobalFiltersMock).toHaveBeenCalled();
     expect(addHookMock).toHaveBeenCalled();
-    expect(listenMock).toHaveBeenCalledWith(3000, '127.0.0.1');
+    expect(listenMock).toHaveBeenCalledWith(3000, '0.0.0.0');
   });
 });

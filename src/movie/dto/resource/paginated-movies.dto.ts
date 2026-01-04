@@ -1,26 +1,20 @@
 import { Movie } from 'src/_repository/_entity';
-import {
-  MovieResourceDTO,
-  newMovieResourceFromEntity,
-} from '../../../_shared/dto/resource/movie.dto';
+import { MovieResourceDTO } from '../../../_shared/dto/resource/movie.dto';
 
-export class PaginatedMovieResourcesDTO {
+export class PaginatedMovieResourceDTO {
   total?: number;
   page?: number;
   size?: number;
   data?: MovieResourceDTO[];
-}
 
-export function newPaginatedMovieResourceDTO(
-  m: Movie[],
-  total: number,
-  page: number,
-  size: number,
-): PaginatedMovieResourcesDTO {
-  return {
-    total,
-    page,
-    size,
-    data: m.map((m) => newMovieResourceFromEntity(m)),
-  };
+  constructor(movies: Movie[], total: number, page: number, size: number) {
+    this.total = total;
+    this.page = page;
+    this.size = size;
+
+    this.data =
+      movies?.length > 0
+        ? movies.map((m) => new MovieResourceDTO(m))
+        : undefined;
+  }
 }

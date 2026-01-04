@@ -7,19 +7,11 @@ import {
 } from 'src/_exception';
 import { User } from 'src/_repository/_entity';
 import { newTicketFromUserAndSession } from 'src/_factory/ticket.factory';
-import { newTicketResourceFromEntity } from 'src/_shared/dto/resource';
-import { newPaginatedTicketResourceDTO } from './dto/resource';
+import { TicketResourceDTO } from 'src/_shared/dto/resource/ticket.dto';
+import { PaginatedTicketResourceDTO } from './dto/resource/paginated-tickets.dto';
 
 jest.mock('src/_factory/ticket.factory', () => ({
   newTicketFromUserAndSession: jest.fn(),
-}));
-
-jest.mock('src/_shared/dto/resource', () => ({
-  newTicketResourceFromEntity: jest.fn(),
-}));
-
-jest.mock('./dto/resource', () => ({
-  newPaginatedTicketResourceDTO: jest.fn(),
 }));
 
 describe('TicketOrchestrator', () => {
@@ -62,9 +54,6 @@ describe('TicketOrchestrator', () => {
       const detailedTicket = { id: 10, guid: 'ticket-guid' } as any;
       ticketService.getDetailedById.mockResolvedValue(detailedTicket);
 
-      const resource = { guid: 'ticket-guid' } as any;
-      (newTicketResourceFromEntity as jest.Mock).mockReturnValue(resource);
-
       const result = await orchestrator.buyTicket(user, dto);
 
       expect(movieSessionService.getPlainByGuid).toHaveBeenCalledWith(
@@ -73,8 +62,9 @@ describe('TicketOrchestrator', () => {
       expect(newTicketFromUserAndSession).toHaveBeenCalledWith(user, session);
       expect(ticketService.create).toHaveBeenCalledWith(ticketEntity);
       expect(ticketService.getDetailedById).toHaveBeenCalledWith(10);
-      expect(newTicketResourceFromEntity).toHaveBeenCalledWith(detailedTicket);
-      expect(result).toBe(resource);
+
+      expect(result).toBeInstanceOf(TicketResourceDTO);
+      expect(result.guid).toBe('ticket-guid');
     });
 
     it('should throw MovieSessionNotFoundException when session does not exist', async () => {
@@ -115,16 +105,14 @@ describe('TicketOrchestrator', () => {
       const updatedTicket = { id: 7, guid: 't1' } as any;
       ticketService.getDetailedById.mockResolvedValue(updatedTicket);
 
-      const resource = { guid: 't1' } as any;
-      (newTicketResourceFromEntity as jest.Mock).mockReturnValue(resource);
-
       const result = await orchestrator.useTicket('t1');
 
       expect(ticketService.getPlainByGuid).toHaveBeenCalledWith('t1');
       expect(ticketService.setUsed).toHaveBeenCalledWith(7);
       expect(ticketService.getDetailedById).toHaveBeenCalledWith(7);
-      expect(newTicketResourceFromEntity).toHaveBeenCalledWith(updatedTicket);
-      expect(result).toBe(resource);
+
+      expect(result).toBeInstanceOf(TicketResourceDTO);
+      expect(result.guid).toBe('t1');
     });
 
     it('should throw TicketNotFoundException when ticket does not exist', async () => {
@@ -158,21 +146,13 @@ describe('TicketOrchestrator', () => {
       const rows = [{ guid: 't1' }] as any;
       ticketService.list.mockResolvedValue([rows, 5, 2, 10]);
 
-      const mapped = { data: [] } as any;
-      (newPaginatedTicketResourceDTO as jest.Mock).mockReturnValue(mapped);
-
       const result = await orchestrator.list(user, query);
 
       expect(ticketService.list).toHaveBeenCalledWith(1, true, 2, 10);
 
-      expect(newPaginatedTicketResourceDTO).toHaveBeenCalledWith(
-        rows,
-        5,
-        2,
-        10,
-      );
-
-      expect(result).toBe(mapped);
+      expect(result).toBeInstanceOf(PaginatedTicketResourceDTO);
+      expect(result.total).toBe(5);
+      expect(result.page).toBe(2);
     });
   });
 });

@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { TicketOrchestrator } from './ticket.orchestrator';
 import { BuyTicketRequestDTO, ListTicketsRequestDTO } from './dto/request';
-import { PaginatedTicketResourcesDTO } from './dto/resource';
+import { PaginatedTicketResourceDTO } from './dto/resource';
 import { User } from 'src/_repository/_entity';
 import { CurrentUser } from 'src/_decorator';
 import { CustomerGuard, JWTGuard } from 'src/_guard';
@@ -57,11 +57,11 @@ export class TicketController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: PaginatedTicketResourcesDTO })
+  @ApiOkResponse({ type: PaginatedTicketResourceDTO })
   list(
     @CurrentUser() currentUser: User,
     @Query() query: ListTicketsRequestDTO,
-  ): Promise<PaginatedTicketResourcesDTO> {
+  ): Promise<PaginatedTicketResourceDTO> {
     return this.ticketOrchestrator.list(currentUser, query);
   }
 }

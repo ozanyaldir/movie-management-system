@@ -25,7 +25,7 @@ import {
   ListMovieSessionsRequestDTO,
   UpdateMovieSessionRequestDTO,
 } from './dto/request';
-import { PaginatedMovieSessionResourcesDTO } from './dto/resource';
+import { PaginatedMovieSessionResourceDTO } from './dto/resource';
 import { JWTGuard, ManagerGuard } from 'src/_guard';
 import { MovieSessionResourceDTO } from 'src/_shared/dto/resource';
 
@@ -77,13 +77,13 @@ export class MovieSessionController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: PaginatedMovieSessionResourcesDTO })
+  @ApiOkResponse({ type: PaginatedMovieSessionResourceDTO })
   @ApiNotFoundResponse({
     description: 'Movie not found',
   })
   list(
     @Query() query: ListMovieSessionsRequestDTO,
-  ): Promise<PaginatedMovieSessionResourcesDTO> {
+  ): Promise<PaginatedMovieSessionResourceDTO> {
     return this.movieSessionOrchestrator.list(query);
   }
 }

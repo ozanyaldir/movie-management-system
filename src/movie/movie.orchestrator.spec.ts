@@ -9,21 +9,13 @@ import {
   newMovieFromCreateRequestDTO,
   newMovieFromUpdateRequestDTO,
 } from 'src/_factory';
-import { newMovieResourceFromEntity } from 'src/_shared/dto/resource';
-import { newPaginatedMovieResourceDTO } from './dto/resource';
 import { MovieNotFoundException } from 'src/_exception';
+import { MovieResourceDTO } from 'src/_shared/dto/resource';
+import { PaginatedMovieResourceDTO } from './dto/resource';
 
 jest.mock('src/_factory', () => ({
   newMovieFromCreateRequestDTO: jest.fn(),
   newMovieFromUpdateRequestDTO: jest.fn(),
-}));
-
-jest.mock('src/_shared/dto/resource', () => ({
-  newMovieResourceFromEntity: jest.fn(),
-}));
-
-jest.mock('./dto/resource', () => ({
-  newPaginatedMovieResourceDTO: jest.fn(),
 }));
 
 describe('MovieOrchestrator', () => {
@@ -55,16 +47,14 @@ describe('MovieOrchestrator', () => {
       const detailed = { guid: 'm1' } as any;
       movieService.getDetailedByGuid.mockResolvedValue(detailed);
 
-      const resource = { guid: 'm1' } as any;
-      (newMovieResourceFromEntity as jest.Mock).mockReturnValue(resource);
-
       const result = await orchestrator.create(dto);
 
       expect(newMovieFromCreateRequestDTO).toHaveBeenCalledWith(dto);
       expect(movieService.create).toHaveBeenCalledWith(entity);
       expect(movieService.getDetailedByGuid).toHaveBeenCalledWith('m1');
-      expect(newMovieResourceFromEntity).toHaveBeenCalledWith(detailed);
-      expect(result).toBe(resource);
+
+      expect(result).toBeInstanceOf(MovieResourceDTO);
+      expect(result.guid).toBe('m1');
     });
 
     it('should throw MovieNotFoundException when created movie cannot be fetched', async () => {
@@ -91,11 +81,8 @@ describe('MovieOrchestrator', () => {
       const entity = { id: 3 } as any;
       (newMovieFromUpdateRequestDTO as jest.Mock).mockReturnValue(entity);
 
-      const detailed = { id: 3 } as any;
+      const detailed = { id: 3, guid: 'm1' } as any;
       movieService.getDetailedById.mockResolvedValue(detailed);
-
-      const resource = { guid: 'm1' } as any;
-      (newMovieResourceFromEntity as jest.Mock).mockReturnValue(resource);
 
       const result = await orchestrator.update('m1', dto);
 
@@ -103,8 +90,9 @@ describe('MovieOrchestrator', () => {
       expect(newMovieFromUpdateRequestDTO).toHaveBeenCalledWith(dto);
       expect(movieService.update).toHaveBeenCalledWith(3, entity);
       expect(movieService.getDetailedById).toHaveBeenCalledWith(3);
-      expect(newMovieResourceFromEntity).toHaveBeenCalledWith(detailed);
-      expect(result).toBe(resource);
+
+      expect(result).toBeInstanceOf(MovieResourceDTO);
+      expect(result.guid).toBe('m1');
     });
 
     it('should throw MovieNotFoundException when movie does not exist', async () => {
@@ -153,21 +141,13 @@ describe('MovieOrchestrator', () => {
       const rows = [{ guid: 'm1' }] as any;
       movieService.list.mockResolvedValue([rows, 20, 2, 10]);
 
-      const mapped = { data: [] } as any;
-      (newPaginatedMovieResourceDTO as jest.Mock).mockReturnValue(mapped);
-
       const result = await orchestrator.list(dto);
 
       expect(movieService.list).toHaveBeenCalledWith(dto.sort_by, 2, 10);
 
-      expect(newPaginatedMovieResourceDTO).toHaveBeenCalledWith(
-        rows,
-        20,
-        2,
-        10,
-      );
-
-      expect(result).toBe(mapped);
+      expect(result).toBeInstanceOf(PaginatedMovieResourceDTO);
+      expect(result.total).toBe(20);
+      expect(result.page).toBe(2);
     });
   });
 });

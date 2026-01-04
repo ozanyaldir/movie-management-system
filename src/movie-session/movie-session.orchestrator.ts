@@ -4,10 +4,7 @@ import {
   ListMovieSessionsRequestDTO,
   UpdateMovieSessionRequestDTO,
 } from './dto/request';
-import {
-  newPaginatedMovieSessionResourceDTO as newPaginatedMovieSessionResourceDTO,
-  PaginatedMovieSessionResourcesDTO,
-} from './dto/resource';
+import { PaginatedMovieSessionResourceDTO } from './dto/resource';
 import { MovieService, MovieSessionService } from 'src/_service';
 import {
   newMovieSessionFromCreateRequestDTO,
@@ -17,10 +14,8 @@ import {
   MovieNotFoundException,
   MovieSessionNotFoundException,
 } from 'src/_exception';
-import {
-  MovieSessionResourceDTO,
-  newMovieSessionResourceFromEntity,
-} from 'src/_shared/dto/resource';
+import { MovieSessionResourceDTO } from 'src/_shared/dto/resource';
+
 @Injectable()
 export class MovieSessionOrchestrator {
   constructor(
@@ -45,7 +40,8 @@ export class MovieSessionOrchestrator {
     if (!detailedMovieSession) {
       throw new MovieSessionNotFoundException(createdMovieSession.guid);
     }
-    return newMovieSessionResourceFromEntity(detailedMovieSession);
+
+    return new MovieSessionResourceDTO(detailedMovieSession);
   }
 
   async update(
@@ -67,7 +63,8 @@ export class MovieSessionOrchestrator {
     if (!updatedMovieSession) {
       throw new MovieSessionNotFoundException(id);
     }
-    return newMovieSessionResourceFromEntity(updatedMovieSession);
+
+    return new MovieSessionResourceDTO(updatedMovieSession);
   }
 
   async delete(id: string): Promise<void> {
@@ -81,7 +78,7 @@ export class MovieSessionOrchestrator {
 
   async list(
     query: ListMovieSessionsRequestDTO,
-  ): Promise<PaginatedMovieSessionResourcesDTO> {
+  ): Promise<PaginatedMovieSessionResourceDTO> {
     const movie = await this.movieService.getPlainByGuid(query.movie_id);
     if (!movie) {
       throw new MovieNotFoundException(query.movie_id);
@@ -93,6 +90,6 @@ export class MovieSessionOrchestrator {
       query.size,
     );
 
-    return newPaginatedMovieSessionResourceDTO(result, total, page, size);
+    return new PaginatedMovieSessionResourceDTO(result, total, page, size);
   }
 }

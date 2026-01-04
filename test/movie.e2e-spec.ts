@@ -1,19 +1,19 @@
-import { Test } from '@nestjs/testing'
+import { Test } from '@nestjs/testing';
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify'
-import request from 'supertest'
+} from '@nestjs/platform-fastify';
+import request from 'supertest';
 
-import { JWTGuard, ManagerGuard } from '../src/_guard'
-import { MovieOrchestrator } from '../src/movie/movie.orchestrator'
-import { MovieController } from '../src/movie/movie.controller'
+import { JWTGuard, ManagerGuard } from '../src/_guard';
+import { MovieOrchestrator } from '../src/movie/movie.orchestrator';
+import { MovieController } from '../src/movie/movie.controller';
 
-const MOVIE_ID = '11111111-1111-1111-1111-111111111111'
+const MOVIE_ID = '11111111-1111-1111-1111-111111111111';
 
 describe('MovieController (e2e)', () => {
-  let app: NestFastifyApplication
-  let orchestrator: MovieOrchestrator
+  let app: NestFastifyApplication;
+  let orchestrator: MovieOrchestrator;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -37,9 +37,7 @@ describe('MovieController (e2e)', () => {
               total: 1,
               page: 1,
               size: 20,
-              data: [
-                { guid: MOVIE_ID, title: 'Movie', min_allowed_age: 13 },
-              ],
+              data: [{ guid: MOVIE_ID, title: 'Movie', min_allowed_age: 13 }],
             }),
           },
         },
@@ -49,73 +47,73 @@ describe('MovieController (e2e)', () => {
       .useValue({ canActivate: () => true })
       .overrideGuard(ManagerGuard)
       .useValue({ canActivate: () => true })
-      .compile()
+      .compile();
 
-    orchestrator = moduleRef.get(MovieOrchestrator)
+    orchestrator = moduleRef.get(MovieOrchestrator);
 
-    app = await moduleRef.createNestApplication<NestFastifyApplication>(
+    app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
-    )
+    );
 
-    await app.init()
-    await app.getHttpAdapter().getInstance().ready()
-  })
+    await app.init();
+    await app.getHttpAdapter().getInstance().ready();
+  });
 
   afterAll(async () => {
-    await app.close()
-  })
+    await app.close();
+  });
 
   it('/movies (POST) should call orchestrator.create and return 201', async () => {
-    const dto = { title: 'Movie', min_allowed_age: 13 }
+    const dto = { title: 'Movie', min_allowed_age: 13 };
 
     const res = await request(app.getHttpServer())
       .post('/movies')
       .send(dto)
-      .expect(201)
+      .expect(201);
 
-    expect(orchestrator.create).toHaveBeenCalledWith(dto)
-    expect(res.body).toEqual({
+    expect(orchestrator.create).toHaveBeenCalledWith(dto);
+    expect(res.body).toMatchObject({
       guid: MOVIE_ID,
       title: 'Movie',
       min_allowed_age: 13,
-    })
-  })
+    });
+  });
 
   it('/movies/:id (PUT) should call orchestrator.update and return 200', async () => {
-    const dto = { title: 'Updated', min_allowed_age: 16 }
+    const dto = { title: 'Updated', min_allowed_age: 16 };
 
     const res = await request(app.getHttpServer())
       .put(`/movies/${MOVIE_ID}`)
       .send(dto)
-      .expect(200)
+      .expect(200);
 
-    expect(orchestrator.update).toHaveBeenCalledWith(MOVIE_ID, dto)
-    expect(res.body).toEqual({
+    expect(orchestrator.update).toHaveBeenCalledWith(MOVIE_ID, dto);
+    expect(res.body).toMatchObject({
       guid: MOVIE_ID,
       title: 'Updated',
       min_allowed_age: 16,
-    })
-  })
+    });
+  });
 
   it('/movies/:id (DELETE) should call orchestrator.delete and return 200', async () => {
     await request(app.getHttpServer())
       .delete(`/movies/${MOVIE_ID}`)
-      .expect(200)
+      .expect(200);
 
-    expect(orchestrator.delete).toHaveBeenCalledWith(MOVIE_ID)
-  })
+    expect(orchestrator.delete).toHaveBeenCalledWith(MOVIE_ID);
+  });
 
   it('/movies (GET) should call orchestrator.list and return results', async () => {
     const res = await request(app.getHttpServer())
       .get('/movies?page=1&size=20')
-      .expect(200)
+      .expect(200);
 
-    expect(orchestrator.list).toHaveBeenCalled()
-    expect(res.body).toEqual({
+    expect(orchestrator.list).toHaveBeenCalled();
+    expect(res.body).toMatchObject({
       total: 1,
       page: 1,
       size: 20,
       data: [{ guid: MOVIE_ID, title: 'Movie', min_allowed_age: 13 }],
-    })
-  })
-})
+    });
+  });
+});

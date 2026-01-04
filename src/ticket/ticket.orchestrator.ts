@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MovieSessionService } from 'src/_service/';
 import { BuyTicketRequestDTO, ListTicketsRequestDTO } from './dto/request';
-import {
-  newPaginatedTicketResourceDTO,
-  PaginatedTicketResourcesDTO,
-} from './dto/resource';
+import { PaginatedTicketResourceDTO } from './dto/resource';
 import {
   MovieSessionNotFoundException,
   TicketNotFoundException,
@@ -12,10 +9,7 @@ import {
 import { User } from 'src/_repository/_entity';
 import { newTicketFromUserAndSession } from 'src/_factory/ticket.factory';
 import { TicketService } from 'src/_service';
-import {
-  newTicketResourceFromEntity,
-  TicketResourceDTO,
-} from 'src/_shared/dto/resource';
+import { TicketResourceDTO } from 'src/_shared/dto/resource';
 
 @Injectable()
 export class TicketOrchestrator {
@@ -44,7 +38,8 @@ export class TicketOrchestrator {
     if (!detailedTicket) {
       throw new TicketNotFoundException(createdTicket.guid);
     }
-    return newTicketResourceFromEntity(detailedTicket);
+
+    return new TicketResourceDTO(detailedTicket);
   }
 
   async useTicket(id: string): Promise<TicketResourceDTO> {
@@ -59,13 +54,14 @@ export class TicketOrchestrator {
     if (!updatedTicket) {
       throw new TicketNotFoundException(id);
     }
-    return newTicketResourceFromEntity(updatedTicket);
+
+    return new TicketResourceDTO(updatedTicket);
   }
 
   async list(
     user: User,
     query: ListTicketsRequestDTO,
-  ): Promise<PaginatedTicketResourcesDTO> {
+  ): Promise<PaginatedTicketResourceDTO> {
     const [result, total, page, size] = await this.ticketService.list(
       user.id,
       query.is_used,
@@ -73,6 +69,6 @@ export class TicketOrchestrator {
       query.size,
     );
 
-    return newPaginatedTicketResourceDTO(result, total, page, size);
+    return new PaginatedTicketResourceDTO(result, total, page, size);
   }
 }
