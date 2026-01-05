@@ -11,8 +11,6 @@ export class MovieSessionResourceDTO {
   tickets: TicketResourceDTO[] | undefined;
 
   constructor(session: MovieSession) {
-    const tickets = session.tickets ?? [];
-
     this.guid = session.guid;
     this.room_number = session.roomNumber;
     this.screening_date = session.screeningDate;
@@ -22,9 +20,8 @@ export class MovieSessionResourceDTO {
       ? new MovieResourceDTO(session.movie)
       : undefined;
 
-    this.tickets =
-      tickets.length > 0
-        ? tickets.map((t) => new TicketResourceDTO(t))
-        : undefined;
+    this.tickets = Array.isArray(session.tickets)
+      ? session.tickets.map((t) => new TicketResourceDTO(t))
+      : undefined;
   }
 }

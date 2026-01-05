@@ -8,15 +8,12 @@ export class MovieResourceDTO {
   sessions: MovieSessionResourceDTO[] | undefined;
 
   constructor(movie: Movie) {
-    const sessions = movie.sessions ?? [];
-
     this.guid = movie.guid;
     this.title = movie.title;
     this.min_allowed_age = movie.minAllowedAge;
 
-    this.sessions =
-      sessions.length > 0
-        ? sessions.map((s) => new MovieSessionResourceDTO(s))
-        : undefined;
+    this.sessions = Array.isArray(movie.sessions)
+      ? movie.sessions.map((s) => new MovieSessionResourceDTO(s))
+      : undefined;
   }
 }

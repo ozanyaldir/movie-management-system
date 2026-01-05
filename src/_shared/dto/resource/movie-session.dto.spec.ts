@@ -2,7 +2,7 @@ import { MovieSession, Movie, Ticket } from 'src/_repository/_entity';
 import { MovieSessionResourceDTO } from './movie-session.dto';
 
 describe('MovieSessionResourceDTO (constructor mapping)', () => {
-  it('maps primitive fields and keeps movie & tickets as undefined when not provided', () => {
+  it('maps primitive fields and keeps movie & tickets undefined when not provided', () => {
     const entity = {
       guid: 'sess-1',
       roomNumber: 'A1',
@@ -48,6 +48,7 @@ describe('MovieSessionResourceDTO (constructor mapping)', () => {
       min_allowed_age: 13,
       sessions: undefined,
     });
+    expect(dto.tickets).toEqual([]);
   });
 
   it('maps tickets when provided (length > 0)', () => {
@@ -76,7 +77,7 @@ describe('MovieSessionResourceDTO (constructor mapping)', () => {
     });
   });
 
-  it('keeps tickets as undefined when array is empty', () => {
+  it('maps empty ticket array into empty TicketResourceDTO array', () => {
     const entity = {
       guid: 'sess-4',
       roomNumber: 'D4',
@@ -88,7 +89,7 @@ describe('MovieSessionResourceDTO (constructor mapping)', () => {
 
     const dto = new MovieSessionResourceDTO(entity);
 
-    expect(dto.tickets).toBeUndefined();
-    expect(Object.prototype.hasOwnProperty.call(dto, 'tickets')).toBe(true);
+    expect(dto.tickets).toEqual([]);
+    expect(Array.isArray(dto.tickets)).toBe(true);
   });
 });

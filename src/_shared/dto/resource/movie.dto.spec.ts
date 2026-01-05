@@ -22,7 +22,7 @@ describe('MovieResourceDTO (constructor mapping)', () => {
     expect(Object.prototype.hasOwnProperty.call(dto, 'sessions')).toBe(true);
   });
 
-  it('keeps sessions undefined when array is empty', () => {
+  it('maps an empty session array into an empty DTO array', () => {
     const movie = {
       guid: 'mov-2',
       title: 'Interstellar',
@@ -33,8 +33,8 @@ describe('MovieResourceDTO (constructor mapping)', () => {
 
     const dto = new MovieResourceDTO(movie);
 
-    expect(dto.sessions).toBeUndefined();
-    expect(Object.prototype.hasOwnProperty.call(dto, 'sessions')).toBe(true);
+    expect(dto.sessions).toEqual([]);
+    expect(Array.isArray(dto.sessions)).toBe(true);
   });
 
   it('maps sessions when provided (length > 0)', () => {
@@ -68,7 +68,9 @@ describe('MovieResourceDTO (constructor mapping)', () => {
   });
 
   it('creates MovieSessionResourceDTO instances for each session', () => {
-    const session = {} as MovieSession;
+    const session = {
+      tickets: [],
+    } as unknown as MovieSession;
 
     const movie = {
       guid: 'mov-4',
